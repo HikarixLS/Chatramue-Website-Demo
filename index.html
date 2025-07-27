@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChaTraMue - Trà Thái Chính Hiệu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+      // Global callback for Google Maps
+      window.initGoogleMaps = function() {
+        console.log('Google Maps API loaded via callback');
+        window.googleMapsLoaded = true;
+        // Dispatch custom event to notify Vue components
+        window.dispatchEvent(new CustomEvent('google-maps-loaded'));
+      }
+    </script>
+    <script async defer 
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgPvJsKa6ssXgYzQ29CDlH67ACBKoah6E&libraries=places&language=vi&callback=initGoogleMaps&loading=async">
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
