@@ -43,7 +43,7 @@ const props = defineProps({
 })
 
 const cartStore = useCartStore()
-const { addNotification } = useNotification()
+const { showNotification } = useNotification()
 const showToppingModal = ref(false)
 
 const formatPrice = (price) => {
@@ -60,7 +60,7 @@ const openToppingModal = () => {
   } else {
     // Thêm trực tiếp vào giỏ hàng nếu không có topping
     cartStore.addToCart(props.product)
-    addNotification(`Đã thêm ${props.product.name} vào giỏ hàng`, 'success')
+    showNotification(`Đã thêm ${props.product.name} vào giỏ hàng`, 'success')
   }
 }
 
@@ -69,6 +69,6 @@ const handleAddToCart = (cartItem) => {
   const toppingsText = cartItem.selectedToppings.length > 0 
     ? ` với ${cartItem.selectedToppings.map(t => t.name).join(', ')}`
     : ''
-  addNotification(`Đã thêm ${cartItem.name}${toppingsText} vào giỏ hàng`, 'success')
+  showNotification(`Đã thêm ${cartItem.name}${toppingsText} vào giỏ hàng`, 'success')
 }
 </script>

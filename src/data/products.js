@@ -27,6 +27,13 @@ export const sugarOptions = [
   { id: 'full-sugar', name: 'Đường đầy (100%)', value: 100 }
 ]
 
+// Tùy chọn kích thước
+export const sizeOptions = [
+  { id: 'size-s', name: 'Size S', value: 'S', priceMultiplier: 0.8 },
+  { id: 'size-m', name: 'Size M', value: 'M', priceMultiplier: 1.0 },
+  { id: 'size-l', name: 'Size L', value: 'L', priceMultiplier: 1.2 }
+]
+
 export const products = [
   {
     id: 1,

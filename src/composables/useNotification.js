@@ -3,7 +3,7 @@ import { ref } from 'vue'
 const notifications = ref([])
 
 export function useNotification() {
-  const addNotification = (message, type = 'success', duration = 3000) => {
+  const showNotification = (message, type = 'success', duration = 3000) => {
     const id = Date.now()
     const notification = {
       id,
@@ -35,7 +35,8 @@ export function useNotification() {
   
   return {
     notifications,
-    addNotification,
+    showNotification,
+    addNotification: showNotification, // backward compatibility
     removeNotification,
     clearAllNotifications
   }

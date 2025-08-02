@@ -16,7 +16,11 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   function addToCart(product, quantity = 1) {
-    const existingItem = items.value.find(item => item.id === product.id && !item.cartId)
+    const existingItem = items.value.find(item => 
+      item.id === product.id && 
+      !item.cartId &&
+      (!item.selectedToppings || item.selectedToppings.length === 0)
+    )
     
     if (existingItem) {
       existingItem.quantity += quantity
@@ -26,7 +30,8 @@ export const useCartStore = defineStore('cart', () => {
         quantity,
         selectedToppings: [],
         toppingsPrice: 0,
-        totalPrice: product.price
+        totalPrice: product.price,
+        cartId: `${product.id}_simple_${Date.now()}`
       })
     }
     

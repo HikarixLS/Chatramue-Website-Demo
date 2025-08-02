@@ -36,6 +36,35 @@
         <span v-if="cartStore.totalItems > 0" class="cart-count">{{ cartStore.totalItems }}</span>
       </router-link>
     </div>
+
+    <!-- Auth Menu -->
+    <div class="auth-menu">
+      <div v-if="authStore.isAuthenticated" class="user-menu">
+        <div class="user-avatar" @click="toggleUserMenu">
+          <i class="fas fa-user"></i>
+          <span>{{ authStore.userDisplayName }}</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="user-dropdown" :class="{ active: isUserMenuActive }">
+          <router-link to="/profile" @click="closeUserMenu">
+            <i class="fas fa-user"></i>
+            Tài khoản của tôi
+          </router-link>
+          <router-link to="/profile?tab=orders" @click="closeUserMenu">
+            <i class="fas fa-shopping-bag"></i>
+            Đơn hàng của tôi
+          </router-link>
+          <button @click="handleLogout">
+            <i class="fas fa-sign-out-alt"></i>
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+      <div v-else class="auth-links">
+        <router-link to="/login" class="login-btn">Đăng nhập</router-link>
+        <router-link to="/register" class="register-btn">Đăng ký</router-link>
+      </div>
+    </div>
     
     <div class="search-box" :class="{ active: isSearchActive }">
       <input 
@@ -75,11 +104,19 @@
 
 <script setup>
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
+import { useAuthStore } from '../stores/auth'
+import { useNotification } from '../composables/useNotification'
 import { products } from '../data/products'
 
+const router = useRouter()
 const cartStore = useCartStore()
+const authStore = useAuthStore()
+const { showNotification } = useNotification()
+
 const isSearchActive = ref(false)
+const isUserMenuActive = ref(false)
 const searchQuery = ref('')
 const searchInput = ref(null)
 
@@ -103,20 +140,40 @@ const closeSearch = () => {
   searchQuery.value = ''
 }
 
+const toggleUserMenu = () => {
+  isUserMenuActive.value = !isUserMenuActive.value
+}
+
+const closeUserMenu = () => {
+  isUserMenuActive.value = false
+}
+
+const handleLogout = () => {
+  authStore.logout()
+  closeUserMenu()
+  showNotification('Đăng xuất thành công!', 'success')
+  router.push('/')
+}
+
 const performSearch = () => {
   // Search functionality handled by computed property
   // Results are automatically shown in searchResults computed
 }
 
-// Close search when clicking outside
+// Close dropdowns when clicking outside
 const handleClickOutside = (e) => {
   if (!e.target.closest('.search-box') && !e.target.closest('.search-icon') && !e.target.closest('.search-result')) {
     isSearchActive.value = false
+  }
+  if (!e.target.closest('.user-menu')) {
+    isUserMenuActive.value = false
   }
 }
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  // Check auth status on mount
+  authStore.checkAuthStatus()
 })
 
 onUnmounted(() => {

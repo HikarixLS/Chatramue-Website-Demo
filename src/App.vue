@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header />
-    <main>
+    <main class="main-content">
       <router-view />
     </main>
     <Footer />
@@ -16,13 +16,25 @@ import NotificationToast from './components/NotificationToast.vue'
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
 #app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-main {
+.main-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -36,10 +36,29 @@
         
         <div class="options-section">
           <div class="option-group">
+            <h4>Chọn kích thước:</h4>
+            <div class="option-list">
+              <label 
+                v-for="option in dataStore.sizeOptions" 
+                :key="option.id"
+                class="option-item size-option"
+              >
+                <input 
+                  type="radio" 
+                  :value="option.id"
+                  v-model="selectedSize"
+                  name="size-level"
+                >
+                <span>{{ option.name }}</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="option-group">
             <h4>Mức độ đá:</h4>
             <div class="option-list">
               <label 
-                v-for="option in iceOptions" 
+                v-for="option in dataStore.iceOptions" 
                 :key="option.id"
                 class="option-item"
               >
@@ -58,7 +77,7 @@
             <h4>Mức độ đường:</h4>
             <div class="option-list">
               <label 
-                v-for="option in sugarOptions" 
+                v-for="option in dataStore.sugarOptions" 
                 :key="option.id"
                 class="option-item"
               >
@@ -97,7 +116,7 @@
       <div class="modal-footer">
         <button class="cancel-btn" @click="closeModal">Hủy</button>
         <button class="add-to-cart-btn" @click="addToCart">
-          Thêm vào giỏ hàng - {{ formatPrice(totalPrice) }}
+          Xác nhận - {{ formatPrice(totalPrice) }}
         </button>
       </div>
     </div>
@@ -105,8 +124,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { toppings, iceOptions, sugarOptions } from '../data/products'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useDataStore } from '../stores/data'
+
+const dataStore = useDataStore()
 
 const props = defineProps({
   isVisible: {
@@ -119,11 +140,16 @@ const props = defineProps({
   }
 })
 
+onMounted(() => {
+  dataStore.initializeData()
+})
+
 const emit = defineEmits(['close', 'add-to-cart'])
 
 const selectedToppings = ref([])
 const selectedIce = ref('ice-100')
 const selectedSugar = ref('sugar-100')
+const selectedSize = ref('size-m') // Mặc định chọn size M
 const quantity = ref(1)
 
 // Reset selections when modal opens
@@ -132,19 +158,20 @@ watch(() => props.isVisible, (newValue) => {
     selectedToppings.value = []
     selectedIce.value = 'ice-100'
     selectedSugar.value = 'sugar-100'
+    selectedSize.value = 'size-m' // Size M làm mặc định
     quantity.value = 1
   }
 })
 
 const availableToppings = computed(() => {
   if (!props.product.availableToppings) return []
-  return toppings.filter(topping => 
+  return dataStore.toppings.filter(topping => 
     props.product.availableToppings.includes(topping.id)
   )
 })
 
 const selectedToppingsData = computed(() => {
-  return toppings.filter(topping => 
+  return dataStore.toppings.filter(topping => 
     selectedToppings.value.includes(topping.id)
   )
 })
@@ -153,8 +180,13 @@ const toppingsPrice = computed(() => {
   return selectedToppingsData.value.reduce((sum, topping) => sum + topping.price, 0)
 })
 
+const selectedSizeData = computed(() => {
+  return dataStore.sizeOptions.find(size => size.id === selectedSize.value)
+})
+
 const totalPrice = computed(() => {
-  return (props.product.price + toppingsPrice.value) * quantity.value
+  const basePrice = props.product.price * selectedSizeData.value.priceMultiplier
+  return (basePrice + toppingsPrice.value) * quantity.value
 })
 
 const formatPrice = (price) => {
@@ -181,19 +213,21 @@ const closeModal = () => {
 }
 
 const addToCart = () => {
-  const iceLevel = iceOptions.find(ice => ice.id === selectedIce.value)
-  const sugarLevel = sugarOptions.find(sugar => sugar.id === selectedSugar.value)
+  const iceLevel = dataStore.iceOptions.find(ice => ice.id === selectedIce.value)
+  const sugarLevel = dataStore.sugarOptions.find(sugar => sugar.id === selectedSugar.value)
+  const sizeData = selectedSizeData.value
   
   const cartItem = {
     ...props.product,
     selectedToppings: selectedToppingsData.value,
     iceLevel: iceLevel,
     sugarLevel: sugarLevel,
+    size: sizeData,
     toppingsPrice: toppingsPrice.value,
-    totalPrice: props.product.price + toppingsPrice.value,
+    totalPrice: props.product.price * sizeData.priceMultiplier + toppingsPrice.value,
     quantity: quantity.value,
     // Tạo unique ID cho mỗi item với topping khác nhau
-    cartId: `${props.product.id}_${selectedToppings.value.sort().join('_')}_${selectedIce.value}_${selectedSugar.value}_${Date.now()}`
+    cartId: `${props.product.id}_${selectedToppings.value.sort().join('_')}_${selectedIce.value}_${selectedSugar.value}_${selectedSize.value}_${Date.now()}`
   }
   
   emit('add-to-cart', cartItem)
@@ -201,299 +235,4 @@ const addToCart = () => {
 }
 </script>
 
-<style scoped>
-.topping-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
 
-.topping-modal {
-  background: white;
-  border-radius: 12px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #999;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn:hover {
-  color: #333;
-}
-
-.modal-body {
-  padding: 20px;
-}
-
-.product-info {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.product-image {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  border-radius: 8px;
-  background: #f9f9f9;
-}
-
-.product-details h4 {
-  margin: 0 0 5px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.base-price {
-  margin: 0;
-  color: #666;
-  font-size: 14px;
-}
-
-.toppings-section {
-  margin-bottom: 20px;
-}
-
-.toppings-section h4 {
-  margin: 0 0 15px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.toppings-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.topping-item {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.topping-item:hover {
-  border-color: #d62828;
-  background: #fafafa;
-}
-
-.topping-item input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-.topping-name {
-  flex: 1;
-  font-size: 14px;
-  color: #333;
-}
-
-.topping-price {
-  font-size: 14px;
-  color: #d62828;
-  font-weight: 500;
-}
-
-.options-section {
-  margin-bottom: 20px;
-}
-
-.option-group {
-  margin-bottom: 15px;
-}
-
-.option-group h4 {
-  margin: 0 0 10px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.option-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.option-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 14px;
-  background: white;
-}
-
-.option-item:hover {
-  border-color: #d62828;
-  background: #fafafa;
-}
-
-.option-item input[type="radio"] {
-  margin-right: 8px;
-}
-
-.option-item input[type="radio"]:checked + span {
-  color: #d62828;
-  font-weight: 500;
-}
-
-.quantity-section {
-  margin-bottom: 20px;
-}
-
-.quantity-section label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
-}
-
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.quantity-controls button {
-  width: 35px;
-  height: 35px;
-  border: 1px solid #ddd;
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.quantity-controls button:hover:not(:disabled) {
-  background: #f0f0f0;
-}
-
-.quantity-controls button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.quantity-controls input {
-  width: 60px;
-  height: 35px;
-  text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-.total-price {
-  text-align: center;
-  font-size: 18px;
-  color: #d62828;
-  margin-bottom: 20px;
-  padding: 15px;
-  background: #f9f9f9;
-  border-radius: 8px;
-}
-
-.modal-footer {
-  display: flex;
-  gap: 10px;
-  padding: 20px;
-  border-top: 1px solid #eee;
-}
-
-.cancel-btn, .add-to-cart-btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.cancel-btn {
-  background: #f0f0f0;
-  color: #333;
-}
-
-.cancel-btn:hover {
-  background: #e0e0e0;
-}
-
-.add-to-cart-btn {
-  background: var(--btn-bg);
-  color: white;
-}
-
-.add-to-cart-btn:hover {
-  background: var(--btn-hover-bg);
-}
-
-@media (max-width: 480px) {
-  .topping-modal {
-    margin: 10px;
-    max-width: none;
-  }
-  
-  .modal-header, .modal-body, .modal-footer {
-    padding: 15px;
-  }
-  
-  .product-info {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .modal-footer {
-    flex-direction: column;
-  }
-}
-</style>

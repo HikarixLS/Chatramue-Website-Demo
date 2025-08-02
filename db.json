@@ -1,0 +1,108 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "slug": "tra-sua-thai-do",
+      "name": "Trà sữa Thái đỏ",
+      "price": 45000,
+      "image": "/images/005_d5c43865-bc4f-4834-b533-79860c70e26b_300x300.png",
+      "description": "Hỗn hợp trà đỏ của ChaTraMue được trồng và thu hoạch độc quyền từ các vùng núi mát mẻ ở Thái Lan. Trà tỏa ra hương thơm thanh lịch cùng với vị ngọt và hương vị dễ chịu. Trà ngon nhất khi dùng với sữa, có thể thưởng thức nóng hoặc đá.",
+      "category": "tra-sua",
+      "featured": true,
+      "availableToppings": ["bubble", "crystal", "jelly", "pudding", "coconut"]
+    },
+    {
+      "id": 2,
+      "slug": "tra-sua-thai-xanh",
+      "name": "Trà sữa Thái xanh",
+      "price": 45000,
+      "image": "/images/GREEN_TEA_MIX_BAG_300x300.png",
+      "description": "Hỗn hợp trà xanh của ChaTraMue được trồng và thu hoạch độc quyền từ các vùng núi mát mẻ ở Thái Lan. Trà tỏa ra hương thơm thanh lịch cùng với vị ngọt và hương vị dễ chịu. Trà ngon nhất khi dùng với sữa, có thể thưởng thức nóng hoặc đá.",
+      "category": "tra-sua",
+      "featured": true,
+      "availableToppings": ["bubble", "crystal", "jelly", "pudding", "coconut"]
+    },
+    {
+      "id": 3,
+      "slug": "tra-sua-hoa-hong",
+      "name": "Trà sữa Hoa Hồng",
+      "price": 48000,
+      "image": "/images/Rose_300x300.png",
+      "description": "Sự kết hợp hoàn hảo giữa trà đen cao cấp và hương hoa hồng tự nhiên, mang đến trải nghiệm thưởng trà độc đáo và lãng mạn. Hương vị thơm ngọt, dịu nhẹ.",
+      "category": "tra-sua",
+      "featured": false,
+      "availableToppings": ["bubble", "crystal", "jelly", "pudding", "aloe"]
+    },
+    {
+      "id": 4,
+      "slug": "tra-oolong",
+      "name": "Trà Ô Long",
+      "price": 52000,
+      "image": "/images/OOLONG_BOX_FRONT_1024x1024@2x.webp",
+      "description": "Trà Ô Long truyền thống với hương vị đậm đà, được chế biến theo phương pháp cổ truyền. Mang lại cảm giác thư giãn và thanh tịnh.",
+      "category": "tra-truyen-thong",
+      "featured": true,
+      "availableToppings": ["matcha-jelly", "aloe"]
+    },
+    {
+      "id": 5,
+      "slug": "tra-chanh",
+      "name": "Trà chanh mật ong",
+      "price": 35000,
+      "image": "/images/Trà chanh.jpg",
+      "description": "Sự kết hợp tuyệt vời giữa trà đen thơm ngon, chanh tươi và mật ong nguyên chất. Thức uống giải khát hoàn hảo cho mọi thời điểm.",
+      "category": "tra-trai-cay",
+      "featured": true,
+      "availableToppings": ["jelly", "aloe", "coconut"]
+    },
+    {
+      "id": 6,
+      "slug": "tra-hoa-nhai",
+      "name": "Trà hoa nhài",
+      "price": 42000,
+      "image": "/images/Jamine_Butterfly_Pea_Tea_Pack002_300x300.png",
+      "description": "Trà hoa nhài với hương thơm dịu nhẹ, thanh mát. Được pha chế từ những cánh hoa nhài tươi ngon nhất, mang lại cảm giác thư thái.",
+      "category": "tra-hoa",
+      "featured": false,
+      "availableToppings": ["matcha-jelly", "aloe", "coconut"]
+    }
+  ],
+  "toppings": [
+    { "id": "bubble", "name": "Trân châu đen", "price": 5000 },
+    { "id": "crystal", "name": "Trân châu trắng", "price": 5000 },
+    { "id": "jelly", "name": "Thạch cà phê", "price": 6000 },
+    { "id": "pudding", "name": "Pudding", "price": 8000 },
+    { "id": "coconut", "name": "Dừa nạo", "price": 4000 },
+    { "id": "matcha-jelly", "name": "Thạch matcha", "price": 5000 },
+    { "id": "aloe", "name": "Nha đam", "price": 6000 }
+  ],
+  "iceOptions": [
+    { "id": "no-ice", "name": "Không đá", "value": 0 },
+    { "id": "little-ice", "name": "Ít đá (25%)", "value": 25 },
+    { "id": "normal-ice", "name": "Đá vừa (50%)", "value": 50 },
+    { "id": "more-ice", "name": "Nhiều đá (75%)", "value": 75 },
+    { "id": "full-ice", "name": "Đá đầy (100%)", "value": 100 }
+  ],
+  "sugarOptions": [
+    { "id": "no-sugar", "name": "Không đường", "value": 0 },
+    { "id": "little-sugar", "name": "Ít đường (25%)", "value": 25 },
+    { "id": "normal-sugar", "name": "Đường vừa (50%)", "value": 50 },
+    { "id": "more-sugar", "name": "Nhiều đường (75%)", "value": 75 },
+    { "id": "full-sugar", "name": "Đường đầy (100%)", "value": 100 }
+  ],
+  "sizeOptions": [
+    { "id": "size-s", "name": "Size S", "value": "S", "priceMultiplier": 0.8 },
+    { "id": "size-m", "name": "Size M", "value": "M", "priceMultiplier": 1.0 },
+    { "id": "size-l", "name": "Size L", "value": "L", "priceMultiplier": 1.2 }
+  ],
+  "bannerImages": [
+    { "id": 1, "src": "/images/481514790_1039929878172347_8606832626822187572_n.png" },
+    { "id": 2, "src": "/images/474498460_956587323303302_7346476874932876470_n.jpg" },
+    { "id": 3, "src": "/images/499236007_1099898072175527_6959317534763466490_n.png" },
+    { "id": 4, "src": "/images/474505017_1006400948191907_1524309964112798066_n.jpg" },
+    { "id": 5, "src": "/images/486574918_1055629866602348_7146931616085191084_n.jpg" },
+    { "id": 6, "src": "/images/Chraming_Thai_Tea_Cover2.webp" }
+  ],
+  "users": [],
+  "orders": []
+}
