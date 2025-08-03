@@ -1,145 +1,265 @@
-# ChaTraMue Việt Nam - Vue.js Website
+# 🧋 ChaTraMue Việt Nam - Vue.js Website
 
-Website bán trà thái chính hiệu được xây dựng với Vue.js 3.
-
-## Công nghệ sử dụng
-
-- **Vue.js 3** - Framework JavaScript với Composition API
-- **Vue Router** - Định tuyến client-side  
-- **Pinia** - Quản lý state toàn cục
-- **Vite** - Build tool và dev server
-
-## Tính năng
-
-- 🏠 **Trang chủ** với slider hình ảnh tự động
-- 🛍️ **Danh sách sản phẩm** với lưới hiển thị responsive
-- 📱 **Chi tiết sản phẩm** với modal chọn topping
-- 🧊 **Tùy chọn** mức đá và đường cho từng sản phẩm
-- 🛒 **Giỏ hàng** với localStorage và thông báo
-- 💳 **Thanh toán** với form thông tin khách hàng
-- 🔍 **Tìm kiếm** sản phẩm real-time
-
-## Chạy dự án
-
+[![Vue.js](### 📦 Scripts có sẵn
 ```bash
+npm run dev        # Chạy dev server (Vite)
+npm run build      # Build production
+npm run preview    # Preview build
+npm run api        # Chạy JSON Server (port 3001)
+npm run dev:full   # Chạy đồng thời dev + api server
+npm run perf       # Phân tích performance
+npm run analyze    # Build + phân tích performance
+npm run optimize   # Clean + build + analyze toàn diện
+npm run lint       # Kiểm tra & sửa lỗi code
+npm run format     # Format code với Prettier
+```img.shields.io/badge/Vue.js-3.5.18-4FC08D?style=flat-square&logo=vue.js)](https://vuejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
+[![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red?style=flat-square)](LICENSE)
+
+> Website bán trà thái chính hiệu được xây dựng với Vue.js 3, mang đến trải nghiệm mua sắm trực tuyến tối ưu cho thương hiệu ChaTraMue.
+
+## 🛠️ Công nghệ sử dụng
+
+| Công nghệ | Phiên bản | Mô tả |
+|-----------|-----------|--------|
+| **Vue.js 3** | 3.5.18 | Framework JavaScript với Composition API |
+| **Vue Router** | 4.2.0 | Định tuyến client-side SPA |
+| **Pinia** | 2.1.0 | Quản lý state toàn cục hiện đại |
+| **Vite** | 6.3.5 | Build tool & dev server siêu nhanh |
+
+## ✨ Tính năng chính
+
+### 🏪 **Giao diện người dùng**
+- 🏠 **Trang chủ** với slider hình ảnh tự động
+- 🛍️ **Danh sách sản phẩm** với lưới responsive
+- 📱 **Chi tiết sản phẩm** với modal chọn topping
+- 📖 **Giới thiệu** thương hiệu và **Liên hệ** đa cửa hàng
+
+### 🛒 **E-commerce Core**
+- 🧊 **Tùy chọn** mức đá và đường cho từng sản phẩm
+- 🛒 **Giỏ hàng** với localStorage và thông báo real-time
+- 💳 **Thanh toán** với form thông tin khách hàng
+- 🔍 **Tìm kiếm** sản phẩm instant search
+
+### 🎯 **Trải nghiệm**
+- 📱 **Responsive Design** - Tối ưu cho mọi thiết bị
+- ⚡ **Performance** - Lazy loading & fast build
+- 💾 **Offline Support** - localStorage cho giỏ hàng
+
+## 🚀 Khởi chạy nhanh
+
+### Cài đặt & Chạy
+```bash
+# Clone repository
+git clone https://github.com/HikarixLS/Chatramue-Website-Demo.git
+cd Chatramue-Website-Demo
+
+# Cài đặt dependencies
 npm install
+
+# Chạy development server
 npm run dev
 ```
 
-Truy cập: http://localhost:3000
-- 📞 **Liên hệ** với thông tin nhiều cửa hàng
-- 📖 **Giới thiệu** về thương hiệu
+### 🌐 Truy cập
+- **Development**: http://localhost:5173
+- **Alternative**: http://localhost:3000
 
-## Cấu trúc thư mục
-
-```
-src/
-├── components/          # Các component tái sử dụng
-│   ├── Header.vue      # Header với navigation và tìm kiếm
-│   ├── Footer.vue      # Footer đơn giản
-│   ├── ImageSlider.vue # Slider hình ảnh với auto-play
-│   └── ProductCard.vue # Card hiển thị sản phẩm
-├── views/              # Các trang chính
-│   ├── Home.vue        # Trang chủ
-│   ├── Products.vue    # Danh sách sản phẩm
-│   ├── ProductDetail.vue # Chi tiết sản phẩm
-│   ├── ShoppingCart.vue  # Giỏ hàng
-│   ├── CheckOut.vue    # Thanh toán
-│   ├── About.vue       # Giới thiệu
-│   └── Contact.vue     # Liên hệ
-├── stores/             # Pinia stores
-│   └── cart.js         # Store quản lý giỏ hàng
-├── data/               # Dữ liệu tĩnh
-│   └── products.js     # Danh sách sản phẩm
-├── router/             # Vue Router config
-│   └── index.js        # Cấu hình routes
-├── App.vue             # Component gốc
-├── main.js             # Entry point
-└── style.css           # CSS toàn cục
+### � Scripts có sẵn
+```bash
+npm run dev        # Chạy dev server (Vite)
+npm run build      # Build production
+npm run preview    # Preview build
+npm run api        # Chạy JSON Server (port 3001)
+npm run dev:full   # Chạy đồng thời dev + api server
 ```
 
-## Cài đặt và chạy
+## 📁 Cấu trúc dự án
 
-1. **Cài đặt dependencies:**
-   ```bash
-   npm install
-   ```
+```
+📦 Chatramue-Website-Demo/
+├── 📂 public/                  # Static assets
+│   └── 📂 images/             # Product & banner images
+├── 📂 src/
+│   ├── 📂 components/         # Reusable components
+│   │   ├── 🧩 Header.vue      # Navigation & search
+│   │   ├── 🧩 Footer.vue      # Footer component
+│   │   ├── 🧩 ImageSlider.vue # Auto-play slider
+│   │   ├── 🧩 ProductCard.vue # Product display card
+│   │   ├── 🧩 Login.vue       # User authentication
+│   │   ├── 🧩 Register.vue    # User registration
+│   │   ├── 🧩 Profile.vue     # User profile
+│   │   ├── 🧩 ToppingModal.vue # Product customization
+│   │   └── 🧩 NotificationToast.vue # Notifications
+│   ├── 📂 composables/        # Vue composition functions
+│   │   └── 🔧 useNotification.js # Notification logic
+│   ├── 📂 components/         # Main pages
+│   │   ├── 🏠 Home.vue        # Homepage
+│   │   ├── 🛍️ Products.vue    # Product listing
+│   │   ├── 📱 ProductDetail.vue # Product details
+│   │   ├── 🛒 ShoppingCart.vue # Shopping cart
+│   │   ├── 💳 CheckOut.vue    # Checkout process
+│   │   ├── 📖 About.vue       # Brand information
+│   │   └── 📞 Contact.vue     # Contact information
+│   ├── 📂 stores/             # Pinia state management
+│   │   ├── 🏪 auth.js         # Authentication store
+│   │   ├── 🛒 cart.js         # Shopping cart store
+│   │   └── 📊 data.js         # Data management store
+│   ├── 📂 data/               # Static data
+│   │   └── 📋 products.js     # Product catalog
+│   ├── 📂 router/             # Vue Router config
+│   │   └── 🛣️ index.js        # Route definitions
+│   ├── 📂 services/           # API services
+│   │   └── 🔌 api.js          # API integration
+│   ├── 🎯 App.vue             # Root component
+│   ├── 🚀 main.js             # Application entry
+│   └── 🎨 style.css           # Global styles
+├── 📄 db.json                 # JSON Server database
+├── ⚙️ vite.config.js          # Vite configuration
+└── 📦 package.json            # Dependencies & scripts
+```
 
-2. **Chạy development server:**
-   ```bash
-   npm run dev
-   ```
+## 🔧 Development Guide
 
-3. **Build cho production:**
-   ```bash
-   npm run build
-   ```
+### 📋 Prerequisites
+- **Node.js** 16.0+ 
+- **npm** 7.0+
+- **Git** 2.0+
 
-4. **Preview build:**
-   ```bash
-   npm run preview
-   ```
+### 🛠️ Available Commands
 
-## Các tính năng chính
+| Command | Description | Port |
+|---------|-------------|------|
+| `npm run dev` | Development server | 5173 |
+| `npm run build` | Production build | - |
+| `npm run preview` | Preview build locally | 4173 |
+| `npm run api` | JSON Server API | 3001 |
+| `npm run dev:full` | Dev + API servers | 5173 + 3001 |
+| `npm run perf` | Performance analysis | - |
+| `npm run analyze` | Build + performance check | - |
+| `npm run optimize` | Complete optimization cycle | - |
+| `npm run lint` | ESLint code checking | - |
+| `npm run format` | Prettier code formatting | - |
 
-### 🛒 Quản lý giỏ hàng
-- Thêm/xóa sản phẩm
-- Cập nhật số lượng
-- Lưu trữ trong localStorage
-- Hiển thị tổng tiền real-time
+## 🎯 Các tính năng chi tiết
 
-### 🔍 Tìm kiếm
-- Tìm kiếm real-time
-- Hiển thị kết quả dropdown
-- Navigation đến sản phẩm
+### 🛒 **Quản lý giỏ hàng**
+- ➕ Thêm/xóa sản phẩm dễ dàng
+- 🔢 Cập nhật số lượng real-time
+- 💾 Lưu trữ persistent với localStorage
+- 💰 Tính tổng tiền tự động
+- 🔔 Thông báo trạng thái
 
-### 📱 Responsive Design
-- Hoạt động tốt trên desktop, tablet, mobile
-- Grid layout linh hoạt
-- Navigation mobile-friendly
+### 🔍 **Hệ thống tìm kiếm**
+- ⚡ Tìm kiếm instant search
+- 📋 Dropdown kết quả thông minh
+- 🎯 Navigation trực tiếp đến sản phẩm
+- 🏷️ Lọc theo danh mục
 
-### ⚡ Performance
-- Lazy loading components
-- Optimized images
-- Fast build với Vite
+### 📱 **Responsive & Performance**
+- 📱 **Mobile-first** design approach
+- 💻 Tối ưu cho desktop, tablet, mobile
+- 🔄 Grid layout linh hoạt & adaptive
+- 🧭 Navigation mobile-friendly
+- ⚡ **Lazy loading** cho components
+- 🖼️ **Optimized images** với WebP
+- 🚀 **Fast build** với Vite HMR
 
-## Customization
+### 🔐 **User Management**
+- 👤 Đăng ký/đăng nhập người dùng
+- 📝 Quản lý profile cá nhân
+- 🔒 Bảo mật thông tin khách hàng
 
-### Thêm sản phẩm mới
-Chỉnh sửa file `src/data/products.js`:
+## ⚙️ Customization & Extension
+
+### 🆕 **Thêm sản phẩm mới**
+Chỉnh sửa `src/data/products.js`:
 
 ```javascript
 {
   id: 7,
-  slug: 'san-pham-moi',
-  name: 'Tên sản phẩm',
-  price: 50000,
-  image: '/assets/images/image.jpg',
-  description: 'Mô tả sản phẩm...',
-  category: 'danh-muc'
+  slug: 'tra-dao-cam-sa', 
+  name: 'Trà Đào Cam Sả',
+  price: 65000,
+  image: '/images/tra-dao-cam-sa.jpg',
+  description: 'Hương vị tươi mát từ đào, cam và sả...',
+  category: 'tra-trai-cay',
+  ingredients: ['đào', 'cam', 'sả', 'trà đen'],
+  sizes: ['M', 'L'],
+  toppings: ['trân châu', 'thạch', 'pudding']
 }
 ```
 
-### Thêm route mới
-Chỉnh sửa file `src/router/index.js`:
+### 🛣️ **Thêm route mới**
+Cập nhật `src/router/index.js`:
 
 ```javascript
 {
-  path: '/route-moi',
-  name: 'route-moi',
-  component: () => import('../views/ComponentMoi.vue')
+  path: '/promotion',
+  name: 'Promotion', 
+  component: () => import('../components/Promotion.vue'),
+  meta: { title: 'Khuyến mãi' }
 }
 ```
 
-### Styling
-CSS được tổ chức trong `src/style.css` với CSS variables để dễ dàng thay đổi màu sắc và font.
+### 🎨 **Tùy chỉnh giao diện**
+- **CSS Variables**: Định nghĩa trong `src/style.css`
+- **Component Styling**: Scoped CSS trong từng `.vue` file  
+- **Responsive Breakpoints**: Tùy chỉnh cho mobile/tablet/desktop
 
-## Browser Support
+```css
+:root {
+  --primary-color: #d4b895;      /* ChaTraMue brand color */
+  --secondary-color: #8b4513;    /* Brown accent */
+  --success-color: #28a745;      /* Success states */
+  --border-radius: 8px;          /* Consistent rounding */
+}
+```
 
-- Chrome/Edge (Chromium) 87+
-- Firefox 78+
-- Safari 14+
+## 🌍 Browser Support & Deployment
 
-## License
+### ✅ **Supported Browsers**
+| Browser | Version | Status |
+|---------|---------|--------|
+| Chrome/Edge (Chromium) | 87+ | ✅ Fully Supported |
+| Firefox | 78+ | ✅ Fully Supported |
+| Safari | 14+ | ✅ Fully Supported |
+| Mobile Chrome/Safari | Latest | ✅ Optimized |
 
-© 2025 ChaTraMue Việt Nam. All rights reserved.
+### 🚀 **Deployment Options**
+```bash
+# Build for production
+npm run build
+
+# Deploy to Vercel
+vercel --prod
+
+# Deploy to Netlify
+netlify deploy --prod --dir=dist
+
+# Deploy to GitHub Pages
+npm run build && npm run deploy
+```
+
+## 🤝 Contributing
+
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)  
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+## 📄 License & Credits
+
+**© 2025 ChaTraMue Việt Nam. All rights reserved.**
+
+---
+
+### 🏷️ **Tags**
+`#vue3` `#vite` `#pinia` `#e-commerce` `#tea-shop` `#vietnamese` `#responsive` `#spa`
+
+### 👨‍💻 **Developer**
+Made with ❤️ by [HikarixLS](https://github.com/HikarixLS)
+
+---
+⭐ **Star this repo if you found it helpful!**
