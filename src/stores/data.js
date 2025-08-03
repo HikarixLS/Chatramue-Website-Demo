@@ -89,13 +89,13 @@ export const useDataStore = defineStore('data', () => {
   const loadBanners = async () => {
     try {
       if (isApiAvailable.value) {
-        const banners = await api.banners.getAll()
+        const banners = await api.bannerImages.getAll()
         bannerImages.value = banners.map(b => b.src)
       } else {
-        bannerImages.value = staticBanners
+        bannerImages.value = staticBanners.map(b => b.src)
       }
     } catch (err) {
-      bannerImages.value = staticBanners
+      bannerImages.value = staticBanners.map(b => b.src)
     }
   }
 
@@ -110,7 +110,7 @@ export const useDataStore = defineStore('data', () => {
     iceOptions.value = staticIceOptions
     sugarOptions.value = staticSugarOptions
     sizeOptions.value = staticSizeOptions
-    bannerImages.value = staticBanners
+    bannerImages.value = staticBanners.map(b => b.src)
     
     console.log('Static data loaded:', {
       products: products.value.length,

@@ -147,9 +147,11 @@
                       <div class="item-details">
                         <h4>{{ item.name }}</h4>
                         <div class="item-options">
-                          <span v-if="item.selectedSize">Size: {{ item.selectedSize }}</span>
+                          <span v-if="item.size && item.size.value">Size: {{ item.size.value }}</span>
+                          <span v-if="item.iceLevel">Đá: {{ item.iceLevel.name }}</span>
+                          <span v-if="item.sugarLevel">Đường: {{ item.sugarLevel.name }}</span>
                           <span v-if="item.selectedToppings && item.selectedToppings.length > 0">
-                            Topping: {{ item.selectedToppings.join(', ') }}
+                            Topping: {{ item.selectedToppings.map(t => t.name).join(', ') }}
                           </span>
                         </div>
                         <div class="item-quantity-price">

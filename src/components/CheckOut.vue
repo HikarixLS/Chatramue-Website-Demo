@@ -14,6 +14,12 @@
               <div v-if="item.size && item.size.value" class="item-size">
                 Size: {{ item.size.value }}
               </div>
+              <div v-if="item.iceLevel" class="item-options">
+                Đá: {{ item.iceLevel.name }}
+              </div>
+              <div v-if="item.sugarLevel" class="item-options">
+                Đường: {{ item.sugarLevel.name }}
+              </div>
               <div v-if="item.selectedToppings && item.selectedToppings.length > 0" class="item-toppings">
                 + {{ item.selectedToppings.map(t => t.name).join(', ') }}
               </div>
@@ -164,3 +170,166 @@ const submitOrder = () => {
   }
 }
 </script>
+
+<style scoped>
+.checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.checkout-summary {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.checkout-summary h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.item-size {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.item-options {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+  font-style: italic;
+}
+
+.item-toppings {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.item-price {
+  font-weight: 600;
+  color: #e67e22;
+  margin-left: 1rem;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 2px solid #e67e22;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.total-price {
+  color: #e67e22;
+  font-size: 1.2rem;
+}
+
+.checkout-form {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.checkout-form h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.checkout-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.checkout-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.checkout-form input:focus {
+  outline: none;
+  border-color: #e67e22;
+}
+
+.checkout-btn {
+  width: 100%;
+  background: #e67e22;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.checkout-btn:hover:not(:disabled) {
+  background: #d35400;
+}
+
+.checkout-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: #fdf2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .checkout-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+}
+</style>

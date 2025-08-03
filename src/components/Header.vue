@@ -107,12 +107,13 @@ import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
 import { useAuthStore } from '../stores/auth'
+import { useDataStore } from '../stores/data'
 import { useNotification } from '../composables/useNotification'
-import { products } from '../data/products'
 
 const router = useRouter()
 const cartStore = useCartStore()
 const authStore = useAuthStore()
+const dataStore = useDataStore()
 const { showNotification } = useNotification()
 
 const isSearchActive = ref(false)
@@ -124,7 +125,7 @@ const searchResults = computed(() => {
   if (!searchQuery.value.trim()) return []
   
   const query = searchQuery.value.toLowerCase()
-  return products.filter(product => 
+  return dataStore.products.filter(product => 
     product.name.toLowerCase().includes(query)
   ).slice(0, 5)
 })

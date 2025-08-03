@@ -185,6 +185,11 @@ export const ordersAPI = {
   }),
 }
 
+// Banner Images API
+export const bannerImagesAPI = {
+  getAll: () => apiRequest('/bannerImages'),
+}
+
 // Health check
 export const healthCheck = async () => {
   try {
@@ -202,6 +207,7 @@ const api = {
   options: optionsAPI,
   users: usersAPI,
   orders: ordersAPI,
+  bannerImages: bannerImagesAPI,
   healthCheck,
 }
 

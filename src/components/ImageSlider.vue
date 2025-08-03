@@ -1,26 +1,32 @@
 <template>
   <div class="slider">
-    <img 
-      v-for="(image, index) in images" 
-      :key="index"
-      :src="image" 
-      :alt="`Banner ${index + 1}`"
-      class="slide"
-      :class="{ active: index === currentSlide }"
-    >
-    
-    <button class="slider-btn prev" @click="prevSlide">&lt;</button>
-    <button class="slider-btn next" @click="nextSlide">&gt;</button>
-    
-    <div class="slider-dots">
-      <button 
+    <div v-if="!images || images.length === 0" class="no-images">
+      <p>No images to display</p>
+      <p>Images: {{ images }}</p>
+    </div>
+    <template v-else>
+      <img 
         v-for="(image, index) in images" 
         :key="index"
-        class="slider-dot"
+        :src="image" 
+        :alt="`Banner ${index + 1}`"
+        class="slide"
         :class="{ active: index === currentSlide }"
-        @click="goToSlide(index)"
-      ></button>
-    </div>
+      >
+      
+      <button class="slider-btn prev" @click="prevSlide">&lt;</button>
+      <button class="slider-btn next" @click="nextSlide">&gt;</button>
+      
+      <div class="slider-dots">
+        <button 
+          v-for="(image, index) in images" 
+          :key="index"
+          class="slider-dot"
+          :class="{ active: index === currentSlide }"
+          @click="goToSlide(index)"
+        ></button>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -45,14 +51,21 @@ const props = defineProps({
 const currentSlide = ref(0)
 let slideInterval = null
 
+// Debug
+console.log('ImageSlider props:', props.images)
+
 const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % props.images.length
-  resetInterval()
+  if (props.images && props.images.length > 0) {
+    currentSlide.value = (currentSlide.value + 1) % props.images.length
+    resetInterval()
+  }
 }
 
 const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + props.images.length) % props.images.length
-  resetInterval()
+  if (props.images && props.images.length > 0) {
+    currentSlide.value = (currentSlide.value - 1 + props.images.length) % props.images.length
+    resetInterval()
+  }
 }
 
 const goToSlide = (index) => {
