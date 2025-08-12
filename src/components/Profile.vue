@@ -143,7 +143,7 @@
                   
                   <div class="order-items">
                     <div v-for="item in order.items" :key="item.id" class="order-item">
-                      <img :src="item.image" :alt="item.name" class="item-image">
+                      <img :src="getProductImage(item.image)" :alt="item.name" class="item-image">
                       <div class="item-details">
                         <h4>{{ item.name }}</h4>
                         <div class="item-options">
@@ -228,6 +228,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useNotification } from '../composables/useNotification'
+import { getImagePath } from '../utils/imageUtils'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -330,5 +331,10 @@ const handleLogout = () => {
   authStore.logout()
   showNotification('Đăng xuất thành công!', 'success')
   router.push('/')
+}
+
+// Helper function to get product image path
+const getProductImage = (imagePath) => {
+  return getImagePath(imagePath)
 }
 </script>
