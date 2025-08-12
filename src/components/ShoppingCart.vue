@@ -22,7 +22,7 @@
             <tr v-for="item in cartStore.items" :key="item.id">
               <td>
                 <div class="cart-product">
-                  <img :src="item.image" :alt="item.name">
+                  <img :src="getProductImage(item.image)" :alt="item.name">
                   <div>
                     <div class="cart-product-name">{{ item.name }}</div>
                     <div v-if="item.size" class="cart-options">
@@ -80,6 +80,7 @@
 
 <script setup>
 import { useCartStore } from '../stores/cart'
+import { getImagePath } from '../utils/imageUtils'
 
 const cartStore = useCartStore()
 
@@ -99,5 +100,10 @@ const updateQuantity = (productId, quantity) => {
 
 const getToppingNames = (toppings) => {
   return toppings.map(t => t.name).join(', ')
+}
+
+// Helper function để lấy correct image path
+const getProductImage = (imagePath) => {
+  return getImagePath(imagePath)
 }
 </script>
