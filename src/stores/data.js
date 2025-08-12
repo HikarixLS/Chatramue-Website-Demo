@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import api from '../services/api.js'
 import { sanitizeInput } from '../utils/validation.js'
-import { updateProductImages, updateBannerImages } from '../utils/imageUtils.js'
 import { products as staticProducts, toppings as staticToppings, iceOptions as staticIceOptions, sugarOptions as staticSugarOptions, sizeOptions as staticSizeOptions, bannerImages as staticBanners } from '../data/products.js'
 
 export const useDataStore = defineStore('data', () => {
@@ -37,15 +36,15 @@ export const useDataStore = defineStore('data', () => {
     try {
       if (isApiAvailable.value) {
         const apiProducts = await api.products.getAll()
-        products.value = updateProductImages(apiProducts)
+        products.value = apiProducts
       } else {
-        // Fallback to static data with updated image paths
-        products.value = updateProductImages(staticProducts)
+        // Fallback to static data
+        products.value = staticProducts
       }
     } catch (err) {
       error.value = err.message
-      // Fallback to static data on error with updated image paths
-      products.value = updateProductImages(staticProducts)
+      // Fallback to static data on error
+      products.value = staticProducts
     } finally {
       isLoading.value = false
     }
@@ -93,14 +92,12 @@ export const useDataStore = defineStore('data', () => {
     try {
       if (isApiAvailable.value) {
         const apiBanners = await api.bannerImages.getAll()
-        bannerImages.value = updateBannerImages(apiBanners).map(b => b.src)
+        bannerImages.value = apiBanners.map(b => b.src)
       } else {
-        const updatedBanners = updateBannerImages(staticBanners)
-        bannerImages.value = updatedBanners.map(b => b.src)
+        bannerImages.value = staticBanners.map(b => b.src)
       }
     } catch (err) {
-      const updatedBanners = updateBannerImages(staticBanners)
-      bannerImages.value = updatedBanners.map(b => b.src)
+      bannerImages.value = staticBanners.map(b => b.src)
     }
   }
 
@@ -109,14 +106,13 @@ export const useDataStore = defineStore('data', () => {
     console.log('Initializing data...')
     console.log('Static products:', staticProducts)
     
-    // Load static data first với image paths đã được cập nhật
-    products.value = updateProductImages(staticProducts)
+    // Load static data first
+    products.value = staticProducts
     toppings.value = staticToppings
     iceOptions.value = staticIceOptions
     sugarOptions.value = staticSugarOptions
     sizeOptions.value = staticSizeOptions
-    const updatedBanners = updateBannerImages(staticBanners)
-    bannerImages.value = updatedBanners.map(b => b.src)
+    bannerImages.value = staticBanners.map(b => b.src)
     
     console.log('Static data loaded:', {
       products: products.value.length,
