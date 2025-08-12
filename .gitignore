@@ -1,126 +1,48 @@
-# ==== DEPENDENCIES ====
+# Dependencies
 node_modules/
-jspm_packages/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
-.pnp.*
-.yarn/
 
-# ==== BUILD OUTPUTS ====
+# Build outputs  
 dist/
 dist-ssr/
 *.tgz
-*.tar.gz
-.rollup.cache/
-.cache/
-.parcel-cache/
-.next/
-out/
-.nuxt/
-.vuepress/dist/
-storybook-static/
 
-# ==== ENVIRONMENT & CONFIG ====
+# Environment & Config
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .env.*.local
 
-# ==== IDE & EDITORS ====
+# IDE & Editors
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
-.project
-.classpath
-.settings/
 
-# ==== OS GENERATED ====
+# OS Generated
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 Desktop.ini
 
-# ==== LOGS & DEBUG ====
+# Logs
 logs/
 *.log
-debug.js
-*.debug.js
-.nyc_output/
-coverage/
-*.lcov
 
-# ==== TESTING ====
-cypress/videos/
-cypress/screenshots/
-test-results/
-playwright-report/
-coverage/
-
-# ==== TEMPORARY & CACHE ====
-*.tmp
-*.temp
-.tmp/
-.temp/
+# Cache
 .cache/
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-*.tsbuildinfo
 .eslintcache
-.stylelintcache
+*.tsbuildinfo
 
-# ==== PWA & SERVICE WORKERS ====
-sw.js
-workbox-*.js
-manifest.json.generated
-
-# ==== ANALYSIS & MONITORING ====
-stats.html
-bundle-analyzer-report.html
-.bundle-analyzer/
-
-# ==== DATABASE ====
+# Database
 *.db
 *.sqlite
-*.sqlite3
 
-# ==== BACKUP & ARCHIVES ====
-*.bak
-*.backup
-*.zip
-*.rar
-
-# ==== RUNTIME ====
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# ==== LOCAL DEVELOPMENT ====
+# Local Development
 .local/
-*.local
-.vscode/settings.json
 .history/
 
-# ==== SERVERLESS ====
-.serverless/
+# Serverless
 .vercel/
 .netlify/
-
-# ==== SECURITY ====
-.env.keys
-*.pem
-*.key
-*.cert

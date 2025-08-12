@@ -102,9 +102,10 @@
           </div>
 
           <div class="form-group">
-            <label class="checkbox-label">
+            <label for="agreeTerms" class="checkbox-label">
               <input
                 type="checkbox"
+                id="agreeTerms"
                 v-model="form.agreeTerms"
                 :disabled="isLoading"
                 required

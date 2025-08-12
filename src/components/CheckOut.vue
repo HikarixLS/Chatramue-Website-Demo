@@ -48,6 +48,34 @@
         <label for="address">Địa chỉ giao hàng:</label>
         <input type="text" id="address" v-model="orderForm.address" required>
         
+        <h4>Phương thức thanh toán</h4>
+        <div class="payment-methods">
+          <label class="payment-option">
+            <input type="radio" id="payment-cod" v-model="orderForm.paymentMethod" value="cod" name="payment">
+            <span>Thanh toán khi nhận hàng (COD)</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" id="payment-bank" v-model="orderForm.paymentMethod" value="bank" name="payment">
+            <span>Chuyển khoản ngân hàng</span>
+          </label>
+        </div>
+        
+        <div v-if="orderForm.paymentMethod === 'bank'" class="bank-info">
+          <h5>Thông tin chuyển khoản:</h5>
+          <div class="bank-details">
+            <p><strong>Ngân hàng:</strong> Techombank</p>
+            <p><strong>Số tài khoản:</strong> 19039566880010</p>
+            <p><strong>Chủ tài khoản:</strong> CONG TY TNHH CHATRAMUE VIETNAM</p>
+            <p><strong>Nội dung:</strong> Thanh toan don hang #[Mã đơn hàng]</p>
+            <div class="qr-payment">
+              <p><em>Hoặc quét mã QR để thanh toán nhanh:</em></p>
+              <div class="qr-container">
+                <canvas ref="qrCodeCanvas" class="qr-code"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <label for="notes">Ghi chú (tùy chọn):</label>
         <input type="text" id="notes" v-model="orderForm.notes">
         
@@ -62,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
 import { useAuthStore } from '../stores/auth'
@@ -78,13 +106,29 @@ const orderForm = ref({
   phone: '',
   email: '',
   address: '',
-  notes: ''
+  notes: '',
+  paymentMethod: 'cod'
 })
 
 const errorMessage = ref('')
 const isLoading = ref(true)
 const isReady = ref(false)
 const isRedirecting = ref(false)
+const qrCodeCanvas = ref(null)
+
+// Tạo QR Code data
+const qrPaymentData = computed(() => {
+  const bankInfo = {
+    bank: "Techcombank",
+    accountNumber: "19039566880010",
+    accountName: "CONG TY TNHH CHATRAMUE VIETNAM",
+    amount: cartStore.totalPrice,
+    content: `Thanh toan don hang ChaTraMue ${Date.now()}`,
+  }
+  
+  // Format cho QR Banking Vietnam
+  return `2|99|${bankInfo.accountNumber}|${bankInfo.accountName}|${bankInfo.bank}|${bankInfo.amount}|${bankInfo.content}|VND`
+})
 
 // Kiểm tra đăng nhập khi component được mount
 onMounted(async () => {
@@ -117,7 +161,86 @@ onMounted(async () => {
   
   isLoading.value = false
   isReady.value = true
+  
+  // Tạo QR code sau khi component đã mount
+  await nextTick()
+  generateQRCode()
 })
+
+// Watch payment method changes để regenerate QR code
+watch(() => orderForm.value.paymentMethod, async (newMethod) => {
+  if (newMethod === 'bank') {
+    await nextTick()
+    generateQRCode()
+  }
+})
+
+// Function tạo QR Code
+const generateQRCode = () => {
+  if (!qrCodeCanvas.value) {
+    console.log('Canvas not found')
+    return
+  }
+  
+  const canvas = qrCodeCanvas.value
+  const ctx = canvas.getContext('2d')
+  
+  console.log('Generating QR code...')
+  console.log('Total amount:', cartStore.totalPrice)
+  
+  // Set canvas size
+  canvas.width = 200
+  canvas.height = 200
+  
+  // Clear canvas và show loading
+  ctx.clearRect(0, 0, 200, 200)
+  ctx.fillStyle = '#f8f9fa'
+  ctx.fillRect(0, 0, 200, 200)
+  ctx.fillStyle = '#333'
+  ctx.font = '14px Arial'
+  ctx.textAlign = 'center'
+  ctx.fillText('Đang tạo QR...', 100, 100)
+  
+  // Sử dụng VietQR API với format đúng
+  const amount = cartStore.totalPrice
+  const content = `Thanh toan don hang ChaTraMue ${Date.now()}`
+  const qrApiUrl = `https://img.vietqr.io/image/TCB-19039566880010-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(content)}`
+  
+  console.log('QR URL:', qrApiUrl)
+  
+  const img = new Image()
+  img.crossOrigin = 'anonymous'
+  
+  img.onload = () => {
+    console.log('QR image loaded successfully')
+    ctx.clearRect(0, 0, 200, 200)
+    ctx.drawImage(img, 0, 0, 200, 200)
+  }
+  
+  img.onerror = (error) => {
+    console.error('QR API error:', error)
+    // Fallback: hiển thị thông tin thanh toán
+    ctx.clearRect(0, 0, 200, 200)
+    ctx.fillStyle = '#f0f0f0'
+    ctx.fillRect(0, 0, 200, 200)
+    ctx.strokeStyle = '#ddd'
+    ctx.strokeRect(0, 0, 200, 200)
+    
+    ctx.fillStyle = '#333'
+    ctx.font = '11px Arial'
+    ctx.textAlign = 'center'
+    ctx.fillText('QR Code VietQR', 100, 25)
+    ctx.fillText('Techcombank', 100, 45)
+    ctx.fillText('STK: 19039566880010', 100, 65)
+    ctx.fillText(`Số tiền: ${amount.toLocaleString()}đ`, 100, 85)
+    ctx.fillText('CHATRAMUE VIETNAM', 100, 105)
+    ctx.fillText('─────────────', 100, 125)
+    ctx.fillText('Mở app ngân hàng', 100, 145)
+    ctx.fillText('để quét mã QR', 100, 165)
+  }
+  
+  img.src = qrApiUrl
+}
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat('vi-VN', {

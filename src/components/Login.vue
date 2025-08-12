@@ -40,9 +40,10 @@
           </div>
 
           <div class="form-group">
-            <label class="checkbox-label">
+            <label for="rememberMe" class="checkbox-label">
               <input
                 type="checkbox"
+                id="rememberMe"
                 v-model="form.rememberMe"
                 :disabled="isLoading"
               />

@@ -4,37 +4,16 @@
   "description": "ChaTraMue Vietnam official tea shop website built with Vue.js 3",
   "private": true,
   "type": "module",
-  "keywords": ["vue3", "vite", "pinia", "e-commerce", "tea-shop", "vietnamese", "spa"],
+  "keywords": ["vue3", "vite", "pinia", "e-commerce", "tea-shop"],
   "author": "HikarixLS",
-  "license": "All Rights Reserved",
-  "homepage": "https://github.com/HikarixLS/Chatramue-Website-Demo",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/HikarixLS/Chatramue-Website-Demo.git"
-  },
-  "bugs": {
-    "url": "https://github.com/HikarixLS/Chatramue-Website-Demo/issues"
-  },
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0"
-  },
+  "license": "MIT",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "build:analyze": "vite build --mode analyze",
     "preview": "vite preview --host",
     "api": "json-server --watch db.json --port 3001 --host 0.0.0.0",
     "dev:full": "concurrently \"npm run dev\" \"npm run api\"",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "lint:check": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
-    "format": "prettier --write \"src/**/*.{js,vue,css}\"",
-    "type-check": "vue-tsc --noEmit",
-    "clean": "rimraf dist node_modules/.vite",
-    "serve": "npm run build && npm run preview",
-    "perf": "node scripts/performance-check.js",
-    "analyze": "npm run build && npm run perf",
-    "optimize": "npm run clean && npm run build && npm run perf"
+    "clean": "rimraf dist node_modules/.vite"
   },
   "dependencies": {
     "pinia": "^2.1.0",
@@ -42,17 +21,14 @@
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "concurrently": "^9.2.0",
     "json-server": "^1.0.0-beta.3",
-    "vite": "^6.3.5",
-    "terser": "^5.34.1"
+    "vite": "^6.3.5"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not dead",
-    "not ie 11"
+    "not dead"
   ]
 }
