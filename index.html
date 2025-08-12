@@ -29,9 +29,20 @@
         // Dispatch custom event to notify Vue components
         window.dispatchEvent(new CustomEvent('google-maps-loaded'));
       }
+      
+      // Handle Google Maps load error
+      window.gm_authFailure = function() {
+        console.warn('Google Maps API authentication failed');
+        window.googleMapsError = true;
+      }
     </script>
-    <script async defer 
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgPvJsKa6ssXgYzQ29CDlH67ACBKoah6E&libraries=places&language=vi&callback=initGoogleMaps&loading=async">
+    <!-- No Google Maps API needed - using external links only -->
+    <script>
+      // Placeholder for Maps compatibility
+      window.initGoogleMaps = function() {
+        console.log('Maps functionality using external links');
+        window.googleMapsLoaded = true;
+      }
     </script>
   </head>
   <body>
