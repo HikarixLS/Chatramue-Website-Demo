@@ -97,7 +97,6 @@ onMounted(() => {
   // Router ready
   router.isReady().then(() => {
     isLoading.value = false
-    console.log('🧋 ChaTraMue App loaded successfully!')
   })
 })
 

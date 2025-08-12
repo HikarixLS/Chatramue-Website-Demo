@@ -32,14 +32,6 @@ if (isDev) {
 const pinia = createPinia()
 
 // Pinia devtools in development
-if (isDev) {
-  pinia.use(({ store }) => {
-    store.$onAction(({ name, args }) => {
-      console.log(`Action "${name}" called with args:`, args)
-    })
-  })
-}
-
 app.use(pinia)
 app.use(router)
 
@@ -53,7 +45,6 @@ try {
   if (isDev) {
     performance.mark('app-init-end')
     performance.measure('app-init', 'app-init-start', 'app-init-end')
-    console.log('🧋 ChaTraMue App initialized successfully!')
   }
 } catch (error) {
   console.error('Failed to mount Vue app:', error)
@@ -64,10 +55,10 @@ if ('serviceWorker' in navigator && !isDev) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
       .then(registration => {
-        console.log('SW registered: ', registration)
+        // SW registered successfully
       })
       .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError)
+        console.error('SW registration failed: ', registrationError)
       })
   })
 }

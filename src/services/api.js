@@ -9,16 +9,12 @@ const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
 // Request interceptor for logging
 const logRequest = (url, options) => {
-  if (isDev) {
-    console.log(`🌐 API Request: ${options.method || 'GET'} ${url}`)
-  }
+  // Removed console logging for production
 }
 
 // Response interceptor for logging
 const logResponse = (url, response, duration) => {
-  if (isDev) {
-    console.log(`✅ API Response: ${url} (${duration}ms)`)
-  }
+  // Removed console logging for production
 }
 
 // Error interceptor
@@ -59,9 +55,6 @@ async function apiRequest(endpoint, options = {}) {
   if (!options.method || options.method === 'GET') {
     const cachedResponse = getCachedResponse(cacheKey)
     if (cachedResponse) {
-      if (isDev) {
-        console.log(`💾 Cache Hit: ${url}`)
-      }
       return cachedResponse
     }
   }

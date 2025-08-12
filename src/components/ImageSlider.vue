@@ -51,9 +51,6 @@ const props = defineProps({
 const currentSlide = ref(0)
 let slideInterval = null
 
-// Debug
-console.log('ImageSlider props:', props.images)
-
 const nextSlide = () => {
   if (props.images && props.images.length > 0) {
     currentSlide.value = (currentSlide.value + 1) % props.images.length

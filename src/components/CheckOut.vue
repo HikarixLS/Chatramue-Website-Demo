@@ -179,15 +179,11 @@ watch(() => orderForm.value.paymentMethod, async (newMethod) => {
 // Function tạo QR Code
 const generateQRCode = () => {
   if (!qrCodeCanvas.value) {
-    console.log('Canvas not found')
     return
   }
   
   const canvas = qrCodeCanvas.value
   const ctx = canvas.getContext('2d')
-  
-  console.log('Generating QR code...')
-  console.log('Total amount:', cartStore.totalPrice)
   
   // Set canvas size
   canvas.width = 200
@@ -207,13 +203,10 @@ const generateQRCode = () => {
   const content = `Thanh toan don hang ChaTraMue ${Date.now()}`
   const qrApiUrl = `https://img.vietqr.io/image/TCB-19039566880010-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(content)}`
   
-  console.log('QR URL:', qrApiUrl)
-  
   const img = new Image()
   img.crossOrigin = 'anonymous'
   
   img.onload = () => {
-    console.log('QR image loaded successfully')
     ctx.clearRect(0, 0, 200, 200)
     ctx.drawImage(img, 0, 0, 200, 200)
   }
