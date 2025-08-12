@@ -95,6 +95,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
 import { useAuthStore } from '../stores/auth'
 import { useNotification } from '../composables/useNotification'
+import { validateOrderForm, validateCartItem } from '../utils/validation.js'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -263,10 +264,32 @@ const submitOrder = () => {
     return
   }
   
-  // Validate form
-  if (!orderForm.value.fullName || !orderForm.value.phone || !orderForm.value.email || !orderForm.value.address) {
-    errorMessage.value = 'Vui lòng điền đầy đủ thông tin bắt buộc'
-    showNotification('Vui lòng điền đầy đủ thông tin bắt buộc', 'error')
+  // Validate cart items
+  for (let item of cartStore.items) {
+    const itemError = validateCartItem(item)
+    if (itemError) {
+      showNotification(`Sản phẩm không hợp lệ: ${itemError}`, 'error')
+      return
+    }
+  }
+  
+  // Validate order form với ràng buộc toàn vẹn
+  const orderValidation = validateOrderForm(orderForm.value)
+  if (!orderValidation.isValid) {
+    const firstError = Object.values(orderValidation.errors)[0]
+    errorMessage.value = firstError
+    showNotification(firstError, 'error')
+    return
+  }
+  
+  // Additional business logic validation
+  if (cartStore.totalPrice < 10000) {
+    showNotification('Đơn hàng tối thiểu 10,000 VNĐ', 'error')
+    return
+  }
+  
+  if (cartStore.totalPrice > 5000000) {
+    showNotification('Đơn hàng không được vượt quá 5,000,000 VNĐ', 'error')
     return
   }
   
@@ -276,7 +299,8 @@ const submitOrder = () => {
     items: cartStore.items,
     total: cartStore.totalPrice,
     customer: orderForm.value,
-    orderDate: new Date().toISOString()
+    orderDate: new Date().toISOString(),
+    status: 'pending'
   }
   
   // Simulate API call

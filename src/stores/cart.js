@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { validateCartItem } from '../utils/validation.js'
 
 export const useCartStore = defineStore('cart', () => {
   const items = ref(JSON.parse(localStorage.getItem('cart')) || [])
@@ -16,6 +17,23 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   function addToCart(product, quantity = 1) {
+    // Validate product before adding
+    const validationError = validateCartItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: quantity
+    })
+    
+    if (validationError) {
+      throw new Error(validationError)
+    }
+    
+    // Validate quantity limits
+    if (quantity > 10) {
+      throw new Error('Số lượng mỗi sản phẩm không được quá 10')
+    }
+    
     const existingItem = items.value.find(item => 
       item.id === product.id && 
       !item.cartId &&
@@ -23,7 +41,11 @@ export const useCartStore = defineStore('cart', () => {
     )
     
     if (existingItem) {
-      existingItem.quantity += quantity
+      const newQuantity = existingItem.quantity + quantity
+      if (newQuantity > 10) {
+        throw new Error('Tổng số lượng sản phẩm này trong giỏ hàng không được quá 10')
+      }
+      existingItem.quantity = newQuantity
     } else {
       items.value.push({
         ...product,

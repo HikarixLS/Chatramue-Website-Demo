@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '../services/api.js'
+import { validateUserInput, sanitizeInput } from '../utils/validation.js'
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -22,13 +23,24 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     
     try {
+      // Validate and sanitize input
+      const sanitizedCredentials = {
+        email: sanitizeInput(credentials.email),
+        password: credentials.password // Password không cần sanitize
+      };
+
+      // Basic email validation
+      if (!sanitizedCredentials.email.includes('@')) {
+        throw new Error('Email không hợp lệ');
+      }
+
       // Simulate API call - in real app, this would be an actual API request
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       // Get users from localStorage
       const users = JSON.parse(localStorage.getItem('chatramue_users') || '[]')
       const foundUser = users.find(u => 
-        u.email === credentials.email && u.password === credentials.password
+        u.email === sanitizedCredentials.email && u.password === sanitizedCredentials.password
       )
       
       if (!foundUser) {
@@ -56,6 +68,21 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     
     try {
+      // Validate and sanitize input data
+      const validation = validateUserInput(userData);
+      if (!validation.isValid) {
+        throw new Error('Dữ liệu đăng ký không hợp lệ: ' + validation.errors.join(', '));
+      }
+
+      // Sanitize input
+      const sanitizedData = {
+        email: sanitizeInput(userData.email),
+        fullName: sanitizeInput(userData.fullName),
+        phone: sanitizeInput(userData.phone),
+        address: sanitizeInput(userData.address),
+        password: userData.password // Password sẽ được hash ở backend
+      };
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       
@@ -63,18 +90,18 @@ export const useAuthStore = defineStore('auth', () => {
       const users = JSON.parse(localStorage.getItem('chatramue_users') || '[]')
       
       // Check if email already exists
-      if (users.some(u => u.email === userData.email)) {
+      if (users.some(u => u.email === sanitizedData.email)) {
         throw new Error('Email này đã được đăng ký')
       }
       
       // Create new user
       const newUser = {
         id: Date.now().toString(),
-        email: userData.email,
-        password: userData.password,
-        fullName: userData.fullName,
-        phone: userData.phone,
-        address: userData.address,
+        email: sanitizedData.email,
+        password: sanitizedData.password,
+        fullName: sanitizedData.fullName,
+        phone: sanitizedData.phone,
+        address: sanitizedData.address,
         createdAt: new Date().toISOString()
       }
       
@@ -153,11 +180,27 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     
     try {
+      // Validate and sanitize profile data
+      const validation = validateUserInput(profileData);
+      if (!validation.isValid) {
+        throw new Error('Dữ liệu cập nhật không hợp lệ: ' + validation.errors.join(', '));
+      }
+
+      // Sanitize input
+      const sanitizedData = {};
+      Object.keys(profileData).forEach(key => {
+        if (key !== 'password') {
+          sanitizedData[key] = sanitizeInput(profileData[key]);
+        } else {
+          sanitizedData[key] = profileData[key];
+        }
+      });
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500))
       
       // Update user data
-      const updatedUser = { ...user.value, ...profileData }
+      const updatedUser = { ...user.value, ...sanitizedData }
       user.value = updatedUser
       
       // Update in localStorage
@@ -167,7 +210,7 @@ export const useAuthStore = defineStore('auth', () => {
       const users = JSON.parse(localStorage.getItem('chatramue_users') || '[]')
       const userIndex = users.findIndex(u => u.id === user.value.id)
       if (userIndex !== -1) {
-        users[userIndex] = { ...users[userIndex], ...profileData }
+        users[userIndex] = { ...users[userIndex], ...sanitizedData }
         localStorage.setItem('chatramue_users', JSON.stringify(users))
       }
       

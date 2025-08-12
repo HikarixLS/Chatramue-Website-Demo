@@ -155,6 +155,7 @@ import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useNotification } from '../composables/useNotification'
+import { validateUserInput, validatePassword } from '../utils/validation.js'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -173,20 +174,47 @@ const form = reactive({
   agreeTerms: false
 })
 
+const fieldErrors = ref({})
+
 const { isLoading, error } = authStore
 
 const validationError = computed(() => {
+  // Real-time validation
+  const validation = validateUserInput({
+    fullName: form.fullName,
+    email: form.email,
+    phone: form.phone,
+    password: form.password,
+    address: form.address
+  })
+  
+  fieldErrors.value = validation.errors
+  
+  // Password confirmation check
   if (form.password && form.confirmPassword && form.password !== form.confirmPassword) {
     return 'Mật khẩu xác nhận không khớp'
   }
-  if (form.password && form.password.length < 6) {
-    return 'Mật khẩu phải có ít nhất 6 ký tự'
+  
+  // Show first validation error
+  const errorKeys = Object.keys(validation.errors)
+  if (errorKeys.length > 0) {
+    return validation.errors[errorKeys[0]]
   }
+  
   return null
 })
 
 const isFormValid = computed(() => {
-  return form.fullName && 
+  const validation = validateUserInput({
+    fullName: form.fullName,
+    email: form.email,
+    phone: form.phone,
+    password: form.password,
+    address: form.address
+  })
+  
+  return validation.isValid && 
+         form.fullName && 
          form.email && 
          form.password && 
          form.confirmPassword && 
@@ -196,18 +224,32 @@ const isFormValid = computed(() => {
 })
 
 const handleRegister = async () => {
-  if (validationError.value) {
-    showNotification(validationError.value, 'error')
-    return
-  }
-
-  const result = await authStore.register({
+  // Comprehensive validation before submit
+  const validation = validateUserInput({
     fullName: form.fullName,
     email: form.email,
     phone: form.phone,
     password: form.password,
     address: form.address
   })
+  
+  if (!validation.isValid) {
+    const firstError = Object.values(validation.errors)[0]
+    showNotification(firstError, 'error')
+    return
+  }
+  
+  if (form.password !== form.confirmPassword) {
+    showNotification('Mật khẩu xác nhận không khớp', 'error')
+    return
+  }
+  
+  if (!form.agreeTerms) {
+    showNotification('Vui lòng đồng ý với điều khoản sử dụng', 'error')
+    return
+  }
+
+  const result = await authStore.register(validation.sanitizedData)
 
   if (result.success) {
     showNotification('Đăng ký thành công! Chào mừng bạn đến với Cha Trà Mue!', 'success')

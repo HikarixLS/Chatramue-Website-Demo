@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import api from '../services/api.js'
+import { sanitizeInput } from '../utils/validation.js'
 import { products as staticProducts, toppings as staticToppings, iceOptions as staticIceOptions, sugarOptions as staticSugarOptions, sizeOptions as staticSizeOptions, bannerImages as staticBanners } from '../data/products.js'
 
 export const useDataStore = defineStore('data', () => {
@@ -149,7 +150,14 @@ export const useDataStore = defineStore('data', () => {
     if (products.value.length === 0) {
       await loadProducts()
     }
-    const lowerQuery = query.toLowerCase()
+    
+    // Sanitize search query
+    const sanitizedQuery = sanitizeInput(query);
+    if (!sanitizedQuery || sanitizedQuery.length < 2) {
+      return [];
+    }
+    
+    const lowerQuery = sanitizedQuery.toLowerCase()
     return products.value.filter(p => 
       p.name.toLowerCase().includes(lowerQuery) || 
       p.description.toLowerCase().includes(lowerQuery)

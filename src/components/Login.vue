@@ -83,6 +83,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useNotification } from '../composables/useNotification'
+import { validateEmail, sanitizeInput } from '../utils/validation.js'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -98,10 +99,25 @@ const form = reactive({
 const { isLoading, error } = authStore
 
 const handleLogin = async () => {
-  const result = await authStore.login({
-    email: form.email,
-    password: form.password
-  })
+  // Validate and sanitize input
+  const emailError = validateEmail(form.email)
+  if (emailError) {
+    showNotification(emailError, 'error')
+    return
+  }
+  
+  if (!form.password) {
+    showNotification('Mật khẩu không được để trống', 'error')
+    return
+  }
+  
+  // Sanitize inputs
+  const sanitizedData = {
+    email: sanitizeInput(form.email),
+    password: sanitizeInput(form.password)
+  }
+
+  const result = await authStore.login(sanitizedData)
 
   if (result.success) {
     showNotification('Đăng nhập thành công!', 'success')
