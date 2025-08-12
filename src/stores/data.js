@@ -1,14 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import api from '../services/api.js'  // Initialize all data
-  const initializeData = async () => {
-    // Load static data first
-    products.value = staticProducts
-    toppings.value = staticToppings
-    iceOptions.value = staticIceOptions
-    sugarOptions.value = staticSugarOptions
-    sizeOptions.value = staticSizeOptions
-    bannerImages.value = staticBanners.map(b => b.src)zeInput } from '../utils/validation.js'
+import api from '../services/api.js'
+import { sanitizeInput } from '../utils/validation.js'
 import { products as staticProducts, toppings as staticToppings, iceOptions as staticIceOptions, sugarOptions as staticSugarOptions, sizeOptions as staticSizeOptions, bannerImages as staticBanners } from '../data/products.js'
 
 export const useDataStore = defineStore('data', () => {
