@@ -5,6 +5,9 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [vue()],
   
+  // Cấu hình base path cho GitHub Pages
+  base: '/Chatramue-Website-Demo/',
+  
   server: {
     port: 5173,
     host: true,
@@ -15,6 +18,8 @@ export default defineConfig({
   build: {
     target: 'es2015',
     minify: 'esbuild',
+    outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
       output: {
         manualChunks: {
