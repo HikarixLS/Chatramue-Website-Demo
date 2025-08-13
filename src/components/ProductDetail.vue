@@ -8,7 +8,7 @@
       <div class="content">
         <h1>{{ product.name }}</h1>
         <div class="rating-summary">
-          <div class="stars">
+          <div class="stars" :key="`stars-${reviews.length}-${averageRating}`">
             <i v-for="i in 5" :key="i" 
                :class="['fas fa-star', { 'filled': i <= averageRating }]"></i>
           </div>
@@ -31,16 +31,43 @@
       <!-- Write Review Form -->
       <div v-if="authStore.isAuthenticated" class="write-review">
         <h4>Viết đánh giá của bạn</h4>
-        <div class="rating-input">
-          <span>Điểm đánh giá:</span>
-          <div class="stars-input">
-            <i v-for="i in 5" :key="i" 
-               :class="['fas fa-star', { 'filled': i <= newReview.rating }]"
-               @click="newReview.rating = i"></i>
+        
+        <div class="review-form-content">
+          <div class="rating-input">
+            <span>Điểm đánh giá:</span>
+            <div class="stars-input">
+              <i v-for="i in 5" :key="i" 
+                 :class="['fas fa-star', { 'filled': i <= newReview.rating }]"
+                 @click="setRating(i)"
+                 @mouseover="hoverRating = i"
+                 @mouseleave="hoverRating = 0"
+                 :style="{ color: i <= (hoverRating || newReview.rating) ? '#ffc107' : '#ddd' }"></i>
+            </div>
+            <span class="rating-display">({{ newReview.rating }}/5)</span>
+          </div>
+          
+          <div class="comment-input">
+            <label for="review-comment">Bình luận của bạn:</label>
+            <textarea 
+              id="review-comment"
+              v-model="newReview.comment" 
+              placeholder="Nhập bình luận của bạn..." 
+              rows="4">
+            </textarea>
+          </div>
+          
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 2px solid #ddd;">
+            <div style="padding: 8px 0;">
+              <button 
+                @click="submitReview" 
+                type="button"
+                :disabled="!newReview.comment.trim()"
+                class="custom-submit-btn">
+                <span style="display: inline-block; padding: 0 8px;">Gửi đánh giá</span>
+              </button>
+            </div>
           </div>
         </div>
-        <textarea v-model="newReview.comment" placeholder="Nhập bình luận của bạn..." rows="4"></textarea>
-        <button @click="submitReview" class="btn btn-primary">Gửi đánh giá</button>
       </div>
       
       <div v-else class="login-prompt">
@@ -49,6 +76,11 @@
       
       <!-- Reviews List -->
       <div class="reviews-list">
+        <h3>Danh sách đánh giá ({{ reviews.length }})</h3>
+        
+        <div v-if="reviews.length === 0" style="padding: 20px; background: #f8f9fa; border-radius: 8px; text-align: center; color: #666;">
+          Chưa có đánh giá nào cho sản phẩm này.
+        </div>
         <div v-for="review in reviews" :key="review.id" class="review-item">
           <div class="review-header">
             <strong>{{ review.userName }}</strong>
@@ -56,7 +88,9 @@
               <i v-for="i in 5" :key="i" 
                  :class="['fas fa-star', { 'filled': i <= review.rating }]"></i>
             </div>
-            <span class="review-date">{{ formatDate(review.createdAt) }}</span>
+            <span class="review-date">
+              {{ review.createdAt ? new Date(review.createdAt).toLocaleDateString('vi-VN') : '' }}
+            </span>
           </div>
           <p class="review-comment">{{ review.comment }}</p>
         </div>
@@ -78,7 +112,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
 import { useAuthStore } from '../stores/auth'
@@ -99,17 +133,37 @@ const isBuyNowMode = ref(false)
 // Reviews data
 const reviews = ref([])
 const newReview = ref({
-  rating: 5,
+  rating: 0,
   comment: ''
 })
+const hoverRating = ref(0)
 
 // Load reviews for current product
 const loadReviews = async () => {
+  if (!product.value?.id) {
+    console.log('❌ No product ID found')
+    return
+  }
+  
+  const productId = parseInt(product.value.id)
+  console.log('🔄 Loading reviews for product:', productId, 'from product:', product.value.name)
+  
   try {
-    const response = await fetch(`http://localhost:3001/reviews?productId=${route.params.id}`)
-    reviews.value = await response.json()
+    const url = `http://localhost:3001/reviews?productId=${productId}`
+    console.log('📡 API URL:', url)
+    
+    const response = await fetch(url)
+    const reviewsData = await response.json()
+    
+    console.log('✅ API Response:', reviewsData)
+    console.log('📊 Reviews count:', reviewsData.length)
+    
+    reviews.value = reviewsData
+    
+    console.log('💾 Reviews stored in reactive:', reviews.value)
   } catch (error) {
-    console.error('Error loading reviews:', error)
+    console.error('❌ Error loading reviews:', error)
+    reviews.value = []
   }
 }
 
@@ -122,14 +176,28 @@ const averageRating = computed(() => {
 
 // Submit new review
 const submitReview = async () => {
+  console.log('Submit review clicked')
+  console.log('Product:', product.value)
+  console.log('Auth user:', authStore.user)
+  
   if (!newReview.value.comment.trim()) {
     showNotification('Vui lòng nhập bình luận', 'error')
     return
   }
 
+  if (!authStore.isAuthenticated) {
+    showNotification('Vui lòng đăng nhập để đánh giá', 'warning')
+    return
+  }
+
+  if (!product.value?.id) {
+    showNotification('Không tìm thấy thông tin sản phẩm', 'error')
+    return
+  }
+
   try {
     const reviewData = {
-      productId: parseInt(route.params.id),
+      productId: parseInt(product.value.id),
       userId: authStore.user.id,
       userName: authStore.user.fullName,
       rating: newReview.value.rating,
@@ -145,7 +213,7 @@ const submitReview = async () => {
 
     if (response.ok) {
       showNotification('Đánh giá đã được gửi thành công!', 'success')
-      newReview.value = { rating: 5, comment: '' }
+      newReview.value = { rating: 0, comment: '' }
       loadReviews() // Reload reviews
     }
   } catch (error) {
@@ -158,13 +226,36 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('vi-VN')
 }
 
+// Set rating
+const setRating = (rating) => {
+  newReview.value.rating = rating
+}
+
 const product = computed(() => {
-  return dataStore.products.find(p => p.slug === route.params.slug)
+  const foundProduct = dataStore.products.find(p => p.slug === route.params.slug)
+  console.log('Product lookup:', {
+    slug: route.params.slug,
+    allProducts: dataStore.products.map(p => ({id: p.id, slug: p.slug, name: p.name})),
+    foundProduct: foundProduct
+  })
+  return foundProduct
 })
 
-onMounted(() => {
-  dataStore.initializeData()
-  loadReviews()
+onMounted(async () => {
+  await dataStore.initializeData()
+  // Force reload reviews
+  reviews.value = []
+  // Load reviews after product data is available
+  if (product.value?.id) {
+    await loadReviews()
+  }
+})
+
+// Watch for product changes and reload reviews
+watch(() => product.value?.id, (newId) => {
+  if (newId) {
+    loadReviews()
+  }
 })
 
 const formatPrice = (price) => {

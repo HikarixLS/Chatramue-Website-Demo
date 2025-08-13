@@ -235,42 +235,5 @@
   ],
   "users": [],
   "orders": [],
-  "reviews": [
-    {
-      "id": "1",
-      "productId": 1,
-      "userId": 1,
-      "userName": "Nguyễn Văn A",
-      "rating": 5,
-      "comment": "Trà rất ngon, hương vị đậm đà và thơm. Sẽ mua lại!",
-      "createdAt": "2025-08-01T10:30:00Z"
-    },
-    {
-      "id": "2",
-      "productId": 1,
-      "userId": 2,
-      "userName": "Trần Thị B",
-      "rating": 4,
-      "comment": "Chất lượng tốt, giao hàng nhanh. Giá hơi cao một chút.",
-      "createdAt": "2025-08-02T14:15:00Z"
-    },
-    {
-      "id": "3",
-      "productId": 2,
-      "userId": 3,
-      "userName": "Lê Văn C",
-      "rating": 5,
-      "comment": "Trà xanh có vị rất tự nhiên, không bị ngọt gắt. Recommend!",
-      "createdAt": "2025-08-03T09:45:00Z"
-    },
-    {
-      "id": "bdc3",
-      "productId": null,
-      "userId": "1754149425828",
-      "userName": "TRAN GIA HUY",
-      "rating": 5,
-      "comment": "ádawd",
-      "createdAt": "2025-08-12T04:41:15.903Z"
-    }
-  ]
+  "reviews": []
 }

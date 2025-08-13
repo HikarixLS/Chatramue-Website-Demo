@@ -86,17 +86,16 @@
     <div 
       v-if="searchResults.length > 0 && isSearchActive" 
       class="search-result"
-      style="display:block;position:absolute;top:124px;right:40px;z-index:200;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.08);min-width:320px;max-width:420px;"
     >
       <router-link 
         v-for="product in searchResults" 
         :key="product.slug"
         :to="`/product/${product.slug}`"
         @click="closeSearch"
-        style="display:flex;align-items:center;padding:10px 16px;text-decoration:none;color:#222;gap:12px;border-bottom:1px solid #eee;"
+        class="search-result-item"
       >
-        <img :src="product.image" :alt="product.name" style="width:40px;height:40px;object-fit:contain;border-radius:6px;">
-        <span>{{ product.name }}</span>
+        <img :src="product.image" :alt="product.name" class="search-result-image">
+        <span class="search-result-name">{{ product.name }}</span>
       </router-link>
     </div>
   </header>

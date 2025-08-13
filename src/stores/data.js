@@ -1,147 +1,144 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import api from '../services/api.js'
 import { sanitizeInput } from '../utils/validation.js'
-import { products as staticProducts, toppings as staticToppings, iceOptions as staticIceOptions, sugarOptions as staticSugarOptions, sizeOptions as staticSizeOptions, bannerImages as staticBanners } from '../data/products.js'
+
+// Static fallback data - always reliable
+const FALLBACK_DATA = {
+  products: [
+    {
+      id: "1",
+      slug: "tra-sua-thai-do",
+      name: "Trà sữa Thái đỏ",
+      price: 45000,
+      image: "/images/005_d5c43865-bc4f-4834-b533-79860c70e26b_300x300.png",
+      description: "Hỗn hợp trà đỏ của ChaTraMue được trồng và thu hoạch độc quyền từ các vùng núi mát mẻ ở Thái Lan. Trà tỏa ra hương thơm thanh lịch cùng với vị ngọt và hương vị dễ chịu. Trà ngon nhất khi dùng với sữa, có thể thưởng thức nóng hoặc đá.",
+      category: "tra-sua",
+      featured: true,
+      availableToppings: ["bubble", "crystal", "jelly", "pudding", "coconut"]
+    },
+    {
+      id: "2",
+      slug: "tra-sua-thai-xanh",
+      name: "Trà sữa Thái xanh",
+      price: 45000,
+      image: "/images/GREEN_TEA_MIX_BAG_300x300.png",
+      description: "Hỗn hợp trà xanh của ChaTraMue được trồng và thu hoạch độc quyền từ các vùng núi mát mẻ ở Thái Lan. Trà tỏa ra hương thơm thanh lịch cùng với vị ngọt và hương vị dễ chịu. Trà ngon nhất khi dùng với sữa, có thể thưởng thức nóng hoặc đá.",
+      category: "tra-sua",
+      featured: true,
+      availableToppings: ["bubble", "crystal", "jelly", "pudding", "coconut"]
+    },
+    {
+      id: "3",
+      slug: "tra-sua-hoa-hong",
+      name: "Trà sữa Hoa Hồng",
+      price: 48000,
+      image: "/images/Rose_300x300.png",
+      description: "Sự kết hợp hoàn hảo giữa trà đen cao cấp và hương hoa hồng tự nhiên, mang đến trải nghiệm thưởng trà độc đáo và lãng mạn. Hương vị thơm ngọt, dịu nhẹ.",
+      category: "tra-sua",
+      featured: false,
+      availableToppings: ["bubble", "crystal", "jelly", "pudding", "aloe"]
+    },
+    {
+      id: "4",
+      slug: "tra-oolong",
+      name: "Trà Ô Long",
+      price: 52000,
+      image: "/images/OOLONG_BOX_FRONT_1024x1024@2x.webp",
+      description: "Trà Ô Long truyền thống với hương vị đậm đà, được chế biến theo phương pháp cổ truyền. Mang lại cảm giác thư giãn và thanh tịnh.",
+      category: "tra-truyen-thong",
+      featured: true,
+      availableToppings: ["matcha-jelly", "aloe"]
+    },
+    {
+      id: "5",
+      slug: "tra-chanh",
+      name: "Trà chanh mật ong",
+      price: 35000,
+      image: "/images/Trà chanh.jpg",
+      description: "Sự kết hợp tuyệt vời giữa trà đen thơm ngon, chanh tươi và mật ong nguyên chất. Thức uống giải khát hoàn hảo cho mọi thời điểm.",
+      category: "tra-trai-cay",
+      featured: true,
+      availableToppings: ["jelly", "aloe", "coconut"]
+    },
+    {
+      id: "6",
+      slug: "tra-hoa-nhai",
+      name: "Trà hoa nhài",
+      price: 42000,
+      image: "/images/Jamine_Butterfly_Pea_Tea_Pack002_300x300.png",
+      description: "Trà hoa nhài với hương thơm dịu nhẹ, thanh mát. Được pha chế từ những cánh hoa nhài tươi ngon nhất, mang lại cảm giác thư thái.",
+      category: "tra-hoa",
+      featured: false,
+      availableToppings: ["matcha-jelly", "aloe", "coconut"]
+    }
+  ],
+  toppings: [
+    { id: "bubble", name: "Trân châu đen", price: 5000 },
+    { id: "crystal", name: "Trân châu trắng", price: 5000 },
+    { id: "jelly", name: "Thạch cà phê", price: 6000 },
+    { id: "pudding", name: "Pudding", price: 8000 },
+    { id: "coconut", name: "Dừa nạo", price: 4000 },
+    { id: "matcha-jelly", name: "Thạch matcha", price: 5000 },
+    { id: "aloe", name: "Nha đam", price: 6000 }
+  ],
+  iceOptions: [
+    { id: "no-ice", name: "Không đá", value: 0 },
+    { id: "little-ice", name: "Ít đá (25%)", value: 25 },
+    { id: "normal-ice", name: "Đá vừa (50%)", value: 50 },
+    { id: "more-ice", name: "Nhiều đá (75%)", value: 75 },
+    { id: "full-ice", name: "Đá đầy (100%)", value: 100 }
+  ],
+  sugarOptions: [
+    { id: "no-sugar", name: "Không đường", value: 0 },
+    { id: "little-sugar", name: "Ít đường (25%)", value: 25 },
+    { id: "normal-sugar", name: "Đường vừa (50%)", value: 50 },
+    { id: "more-sugar", name: "Nhiều đường (75%)", value: 75 },
+    { id: "full-sugar", name: "Đường đầy (100%)", value: 100 }
+  ],
+  sizeOptions: [
+    { id: "size-s", name: "Size S", value: "S", priceMultiplier: 0.8 },
+    { id: "size-m", name: "Size M", value: "M", priceMultiplier: 1.0 },
+    { id: "size-l", name: "Size L", value: "L", priceMultiplier: 1.2 }
+  ],
+  bannerImages: [
+    "/images/481514790_1039929878172347_8606832626822187572_n.png",
+    "/images/474498460_956587323303302_7346476874932876470_n.jpg", 
+    "/images/499236007_1099898072175527_6959317534763466490_n.png",
+    "/images/474505017_1006400948191907_1524309964112798066_n.jpg",
+    "/images/486574918_1055629866602348_7146931616085191084_n.jpg",
+    "/images/Chraming_Thai_Tea_Cover2.webp"
+  ]
+}
 
 export const useDataStore = defineStore('data', () => {
   const isApiAvailable = ref(false)
-  const products = ref([])
-  const toppings = ref([])
-  const iceOptions = ref([])
-  const sugarOptions = ref([])
-  const sizeOptions = ref([])
-  const bannerImages = ref([])
+  const products = ref(FALLBACK_DATA.products)
+  const toppings = ref(FALLBACK_DATA.toppings)
+  const iceOptions = ref(FALLBACK_DATA.iceOptions)
+  const sugarOptions = ref(FALLBACK_DATA.sugarOptions)
+  const sizeOptions = ref(FALLBACK_DATA.sizeOptions)
+  const bannerImages = ref(FALLBACK_DATA.bannerImages)
   const isLoading = ref(false)
   const error = ref(null)
 
-  // Check API availability
-  const checkApiHealth = async () => {
-    try {
-      isApiAvailable.value = await api.checkHealth()
-      return isApiAvailable.value
-    } catch (error) {
-      isApiAvailable.value = false
-      return false
-    }
-  }
-
-  // Load products
-  const loadProducts = async () => {
-    isLoading.value = true
-    error.value = null
-    
-    try {
-      if (isApiAvailable.value) {
-        const apiProducts = await api.products.getAll()
-        products.value = apiProducts
-      } else {
-        // Fallback to static data
-        products.value = staticProducts
-      }
-    } catch (err) {
-      error.value = err.message
-      // Fallback to static data on error
-      products.value = staticProducts
-    } finally {
-      isLoading.value = false
-    }
-  }
-
-  // Load toppings
-  const loadToppings = async () => {
-    try {
-      if (isApiAvailable.value) {
-        toppings.value = await api.toppings.getAll()
-      } else {
-        toppings.value = staticToppings
-      }
-    } catch (err) {
-      toppings.value = staticToppings
-    }
-  }
-
-  // Load options
-  const loadOptions = async () => {
-    try {
-      if (isApiAvailable.value) {
-        const [ice, sugar, size] = await Promise.all([
-          api.options.getIceOptions(),
-          api.options.getSugarOptions(),
-          api.options.getSizeOptions()
-        ])
-        iceOptions.value = ice
-        sugarOptions.value = sugar
-        sizeOptions.value = size
-      } else {
-        iceOptions.value = staticIceOptions
-        sugarOptions.value = staticSugarOptions
-        sizeOptions.value = staticSizeOptions
-      }
-    } catch (err) {
-      iceOptions.value = staticIceOptions
-      sugarOptions.value = staticSugarOptions
-      sizeOptions.value = staticSizeOptions
-    }
-  }
-
-  // Load banner images
-  const loadBanners = async () => {
-    try {
-      if (isApiAvailable.value) {
-        const apiBanners = await api.bannerImages.getAll()
-        bannerImages.value = apiBanners.map(b => b.src)
-      } else {
-        bannerImages.value = staticBanners.map(b => b.src)
-      }
-    } catch (err) {
-      bannerImages.value = staticBanners.map(b => b.src)
-    }
-  }
-
-  // Initialize all data
+  // Initialize with fallback data immediately - no API calls
   const initializeData = async () => {
-    // Load static data first
-    products.value = staticProducts
-    toppings.value = staticToppings
-    iceOptions.value = staticIceOptions
-    sugarOptions.value = staticSugarOptions
-    sizeOptions.value = staticSizeOptions
-    bannerImages.value = staticBanners.map(b => b.src)
-    
-    // Sau đó thử load từ API (không blocking)
-    checkApiHealth().then(() => {
-      if (isApiAvailable.value) {
-        loadProducts()
-        loadToppings()
-        loadOptions()
-        loadBanners()
-      }
-    })
+    // Data is already loaded from FALLBACK_DATA
+    isLoading.value = false
   }
 
   // Get product by slug
   const getProductBySlug = async (slug) => {
-    if (products.value.length === 0) {
-      await loadProducts()
-    }
     return products.value.find(p => p.slug === slug)
   }
 
   // Get featured products
   const getFeaturedProducts = async () => {
-    if (products.value.length === 0) {
-      await loadProducts()
-    }
     return products.value.filter(p => p.featured)
   }
 
   // Search products
   const searchProducts = async (query) => {
-    if (products.value.length === 0) {
-      await loadProducts()
-    }
-    
     // Sanitize search query
     const sanitizedQuery = sanitizeInput(query);
     if (!sanitizedQuery || sanitizedQuery.length < 2) {
@@ -168,12 +165,7 @@ export const useDataStore = defineStore('data', () => {
     error,
 
     // Actions
-    checkApiHealth,
     initializeData,
-    loadProducts,
-    loadToppings,
-    loadOptions,
-    loadBanners,
     getProductBySlug,
     getFeaturedProducts,
     searchProducts

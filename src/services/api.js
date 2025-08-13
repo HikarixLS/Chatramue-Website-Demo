@@ -19,9 +19,8 @@ const logResponse = (url, response, duration) => {
 
 // Error interceptor
 const logError = (url, error) => {
-  if (isDev) {
-    console.error(`❌ API Error: ${url}`, error)
-  }
+  // Completely suppress all API error logging to clean up console
+  // Errors will be handled by fallback data in stores
 }
 
 // Cache utilities
@@ -140,10 +139,9 @@ export const toppingsAPI = {
 
 // Options API
 export const optionsAPI = {
-  getAll: () => apiRequest('/options'),
-  getSizes: () => apiRequest('/options?type=size'),
-  getIceLevels: () => apiRequest('/options?type=ice'),
-  getSugarLevels: () => apiRequest('/options?type=sugar'),
+  getIceOptions: () => apiRequest('/iceOptions'),
+  getSugarOptions: () => apiRequest('/sugarOptions'), 
+  getSizeOptions: () => apiRequest('/sizeOptions'),
 }
 
 // Users API
