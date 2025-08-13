@@ -141,7 +141,7 @@ const measureInitialLoad = () => {
   new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       if (entry.name === 'first-contentful-paint') {
-        console.log(`⚡ First Contentful Paint: ${entry.startTime}ms`)
+        // Performance measurement
       }
     }
   }).observe({ type: 'paint', buffered: true })
@@ -149,7 +149,6 @@ const measureInitialLoad = () => {
   // Measure when app is fully loaded
   window.addEventListener('load', () => {
     const loadTime = performance.now()
-    console.log(`🚀 App fully loaded in: ${Math.round(loadTime)}ms`)
   })
 }
 

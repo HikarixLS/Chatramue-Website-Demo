@@ -3748,36 +3748,100 @@ footer {
   gap: 1.5rem;
 }
 
+.reviews-list h3 {
+  color: #333 !important;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
 .review-item {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #eee;
+  margin-bottom: 1rem;
 }
 
 .review-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   flex-wrap: wrap;
 }
 
 .review-header strong {
-  color: #333;
+  color: #333 !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.review-header .stars {
+  display: flex;
+  gap: 2px;
+}
+
+.review-header .stars i {
+  color: #ddd;
+  font-size: 1rem;
+}
+
+.review-header .stars i.filled {
+  color: #ffc107;
 }
 
 .review-date {
-  color: #666;
+  color: #666 !important;
   font-size: 0.9rem;
   margin-left: auto;
 }
 
 .review-comment {
-  color: #555;
-  line-height: 1.5;
-  margin: 0;
+  color: #333 !important;
+  line-height: 1.6;
+  margin: 8px 0 !important;
+  font-size: 1rem;
+  padding: 12px !important;
+  background: #f8f9fa;
+  border-left: 3px solid #007bff;
+  border-radius: 0 4px 4px 0;
+  word-wrap: break-word;
+  overflow: visible !important;
+  white-space: normal !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  min-height: 40px;
+  display: block !important;
+}
+
+.review-comment span {
+  display: block !important;
+  width: 100% !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  word-wrap: break-word;
+  color: #333 !important;
+  font-size: 1rem !important;
+}
+
+.review-content {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  width: 100%;
+  overflow: visible;
+}
+
+.review-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ====== RESPONSIVE - PRODUCTS & PRODUCT DETAIL ====== */
