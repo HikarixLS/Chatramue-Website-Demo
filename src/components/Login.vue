@@ -10,10 +10,12 @@
             <input
               type="email"
               id="email"
+              name="email"
               v-model="form.email"
               :disabled="isLoading"
               required
               placeholder="Nhập email của bạn"
+              autocomplete="email"
             />
           </div>
 
@@ -23,10 +25,12 @@
               <input
                 :type="showPassword ? 'text' : 'password'"
                 id="password"
+                name="password"
                 v-model="form.password"
                 :disabled="isLoading"
                 required
                 placeholder="Nhập mật khẩu"
+                autocomplete="current-password"
               />
               <button 
                 type="button" 

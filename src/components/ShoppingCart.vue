@@ -56,9 +56,12 @@
                 <input 
                   type="number" 
                   class="cart-qty" 
+                  :id="`qty-${item.cartId || item.id}`"
+                  :name="`qty-${item.cartId || item.id}`"
                   :value="item.quantity"
                   @change="updateQuantity(item.cartId || item.id, $event.target.value)"
                   min="1"
+                  autocomplete="off"
                 >
               </td>
               <td>{{ formatPrice((item.totalPrice || item.price) * item.quantity) }}</td>

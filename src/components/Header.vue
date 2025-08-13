@@ -25,10 +25,6 @@
       </ul>
     </nav>
     
-    <div class="search-icon" @click="toggleSearch">
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </div>
-
     <!-- Cart Icon -->
     <div class="cart-icon">
       <router-link to="/shopping-cart">
@@ -66,14 +62,21 @@
       </div>
     </div>
     
+    <div class="search-icon" @click="toggleSearch">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    
     <div class="search-box" :class="{ active: isSearchActive }">
       <input 
         type="text" 
+        id="header-search"
+        name="search"
         v-model="searchQuery"
         @keydown.enter="performSearch"
         @keydown.escape="closeSearch"
         placeholder="Tìm kiếm sản phẩm..."
         ref="searchInput"
+        autocomplete="off"
       >
       <button @click="performSearch">
         <i class="fa-solid fa-magnifying-glass"></i>

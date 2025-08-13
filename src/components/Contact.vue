@@ -79,23 +79,23 @@
           <div class="form-row">
             <div class="form-group">
               <label for="name">Họ và tên *</label>
-              <input type="text" id="name" v-model="form.name" required>
+              <input type="text" id="name" name="name" v-model="form.name" required autocomplete="name">
             </div>
             
             <div class="form-group">
               <label for="email">Email *</label>
-              <input type="email" id="email" v-model="form.email" required>
+              <input type="email" id="email" name="email" v-model="form.email" required autocomplete="email">
             </div>
           </div>
           
           <div class="form-group">
             <label for="phone">Số điện thoại</label>
-            <input type="tel" id="phone" v-model="form.phone">
+            <input type="tel" id="phone" name="phone" v-model="form.phone" autocomplete="tel">
           </div>
           
           <div class="form-group">
             <label for="message">Tin nhắn *</label>
-            <textarea id="message" v-model="form.message" rows="6" required placeholder="Hãy cho chúng tôi biết bạn muốn gì..."></textarea>
+            <textarea id="message" name="message" v-model="form.message" rows="6" required placeholder="Hãy cho chúng tôi biết bạn muốn gì..." autocomplete="off"></textarea>
           </div>
           
           <button type="submit" class="submit-btn">

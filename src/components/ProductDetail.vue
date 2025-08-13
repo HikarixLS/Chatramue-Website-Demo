@@ -12,7 +12,8 @@
             <i v-for="i in 5" :key="i" 
                :class="['fas fa-star', { 'filled': i <= averageRating }]"></i>
           </div>
-          <span class="rating-text">{{ averageRating }}/5 ({{ reviews.length }} đánh giá)</span>
+          <span class="rating-text" v-if="reviews.length > 0">{{ averageRating }}/5 ({{ reviews.length }} đánh giá)</span>
+          <span class="rating-text" v-else>Chưa có đánh giá</span>
         </div>
         <p class="description">{{ product.description }}</p>
         <p><strong>Giá:</strong> {{ formatPrice(product.price) }}</p>
@@ -50,9 +51,11 @@
             <label for="review-comment">Bình luận của bạn:</label>
             <textarea 
               id="review-comment"
+              name="review-comment"
               v-model="newReview.comment" 
               placeholder="Nhập bình luận của bạn..." 
-              rows="4">
+              rows="4"
+              autocomplete="off">
             </textarea>
           </div>
           
@@ -89,7 +92,7 @@
                  :class="['fas fa-star', { 'filled': i <= review.rating }]"></i>
             </div>
             <span class="review-date">
-              {{ review.createdAt ? new Date(review.createdAt).toLocaleDateString('vi-VN') : '' }}
+              {{ formatDate(review.date || review.createdAt) }}
             </span>
           </div>
           <p class="review-comment">{{ review.comment }}</p>
@@ -119,7 +122,6 @@ import { useAuthStore } from '../stores/auth'
 import { useDataStore } from '../stores/data'
 import { useNotification } from '../composables/useNotification'
 import ToppingModal from './ToppingModal.vue'
-import api from '../services/api'
 
 const route = useRoute()
 const router = useRouter()
@@ -149,13 +151,10 @@ const loadReviews = async () => {
   console.log('🔄 Loading reviews for product:', productId, 'from product:', product.value.name)
   
   try {
-    const url = `http://localhost:3001/reviews?productId=${productId}`
-    console.log('📡 API URL:', url)
+    // Bắt đầu với mảng rỗng - không có đánh giá mẫu
+    const reviewsData = []
     
-    const response = await fetch(url)
-    const reviewsData = await response.json()
-    
-    console.log('✅ API Response:', reviewsData)
+    console.log('✅ Reviews Data:', reviewsData)
     console.log('📊 Reviews count:', reviewsData.length)
     
     reviews.value = reviewsData
@@ -197,25 +196,19 @@ const submitReview = async () => {
 
   try {
     const reviewData = {
+      id: Date.now(), // Tạo ID đơn giản
       productId: parseInt(product.value.id),
       userId: authStore.user.id,
       userName: authStore.user.fullName,
       rating: newReview.value.rating,
       comment: newReview.value.comment,
-      createdAt: new Date().toISOString()
+      date: new Date().toISOString().split('T')[0] // Format YYYY-MM-DD
     }
 
-    const response = await fetch('http://localhost:3001/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(reviewData)
-    })
-
-    if (response.ok) {
-      showNotification('Đánh giá đã được gửi thành công!', 'success')
-      newReview.value = { rating: 0, comment: '' }
-      loadReviews() // Reload reviews
-    }
+    // Thêm review vào mock data thay vì gọi API
+    reviews.value.unshift(reviewData)
+    showNotification('Đánh giá đã được gửi thành công!', 'success')
+    newReview.value = { rating: 0, comment: '' }
   } catch (error) {
     showNotification('Có lỗi xảy ra khi gửi đánh giá', 'error')
   }
@@ -223,7 +216,11 @@ const submitReview = async () => {
 
 // Format date
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('vi-VN')
+  try {
+    return new Date(dateString).toLocaleDateString('vi-VN')
+  } catch (error) {
+    return dateString
+  }
 }
 
 // Set rating

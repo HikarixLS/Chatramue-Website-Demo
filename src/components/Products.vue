@@ -8,9 +8,12 @@
         <div class="products-search-box">
           <input 
             type="text" 
+            id="search-products"
+            name="search"
             v-model="searchQuery" 
             placeholder="Tìm kiếm sản phẩm..." 
             class="search-input"
+            autocomplete="off"
           >
           <i class="fas fa-search search-icon"></i>
         </div>

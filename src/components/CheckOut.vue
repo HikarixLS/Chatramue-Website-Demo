@@ -37,16 +37,16 @@
         <h3>Thông tin giao hàng</h3>
         
         <label for="fullName">Họ và tên:</label>
-        <input type="text" id="fullName" v-model="orderForm.fullName" required>
+        <input type="text" id="fullName" name="fullName" v-model="orderForm.fullName" required autocomplete="name">
         
         <label for="phone">Số điện thoại:</label>
-        <input type="tel" id="phone" v-model="orderForm.phone" required>
+        <input type="tel" id="phone" name="phone" v-model="orderForm.phone" required autocomplete="tel">
         
         <label for="email">Email:</label>
-        <input type="email" id="email" v-model="orderForm.email" required>
+        <input type="email" id="email" name="email" v-model="orderForm.email" required autocomplete="email">
         
         <label for="address">Địa chỉ giao hàng:</label>
-        <input type="text" id="address" v-model="orderForm.address" required>
+        <input type="text" id="address" name="address" v-model="orderForm.address" required autocomplete="street-address">
         
         <h4>Phương thức thanh toán</h4>
         <div class="payment-methods">
@@ -77,7 +77,7 @@
         </div>
         
         <label for="notes">Ghi chú (tùy chọn):</label>
-        <input type="text" id="notes" v-model="orderForm.notes">
+        <input type="text" id="notes" name="notes" v-model="orderForm.notes" autocomplete="off">
         
         <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
         

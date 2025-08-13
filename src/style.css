@@ -355,10 +355,20 @@ nav ul li.dropdown:focus-within .dropdown-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 50;
+    z-index: 150 !important;
 }
 .cart-icon { right: 80px; }
-.search-icon { right: 130px; cursor: pointer; }
+.search-icon { 
+    right: 130px !important; 
+    cursor: pointer !important; 
+    pointer-events: auto !important;
+    padding: 5px;
+    transition: all 0.2s ease;
+}
+.search-icon:hover {
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 50%;
+}
 .cart-icon i, .search-icon i {
     font-size: 28px;
     color: #000;
@@ -1991,7 +2001,7 @@ footer {
 .auth-menu {
   position: absolute;
   top: 30px;
-  right: 150px;
+  right: 180px;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -2569,7 +2579,7 @@ footer {
   }
   
   .auth-menu {
-    right: 100px;
+    right: 130px;
     gap: 8px;
     top: 20px;
   }
@@ -2601,7 +2611,7 @@ footer {
 
 @media (max-width: 480px) {
   .auth-menu {
-    right: 80px;
+    right: 100px;
     top: 15px;
   }
   

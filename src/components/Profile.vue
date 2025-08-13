@@ -63,9 +63,11 @@
                   <input
                     type="text"
                     id="fullName"
+                    name="fullName"
                     v-model="profileForm.fullName"
                     :disabled="isLoading"
                     required
+                    autocomplete="name"
                   />
                 </div>
                 
@@ -74,8 +76,10 @@
                   <input
                     type="tel"
                     id="phone"
+                    name="phone"
                     v-model="profileForm.phone"
                     :disabled="isLoading"
+                    autocomplete="tel"
                   />
                 </div>
               </div>
@@ -85,9 +89,11 @@
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   v-model="profileForm.email"
                   :disabled="isLoading"
                   required
+                  autocomplete="email"
                 />
               </div>
 
@@ -95,10 +101,12 @@
                 <label for="address">Địa chỉ</label>
                 <textarea
                   id="address"
+                  name="address"
                   v-model="profileForm.address"
                   :disabled="isLoading"
                   rows="3"
                   placeholder="Nhập địa chỉ của bạn"
+                  autocomplete="street-address"
                 ></textarea>
               </div>
 
@@ -184,8 +192,10 @@
                   <input
                     type="password"
                     id="currentPassword"
+                    name="currentPassword"
                     v-model="passwordForm.currentPassword"
                     required
+                    autocomplete="current-password"
                   />
                 </div>
                 
@@ -194,9 +204,11 @@
                   <input
                     type="password"
                     id="newPassword"
+                    name="newPassword"
                     v-model="passwordForm.newPassword"
                     required
                     minlength="6"
+                    autocomplete="new-password"
                   />
                 </div>
                 
@@ -205,9 +217,11 @@
                   <input
                     type="password"
                     id="confirmNewPassword"
+                    name="confirmNewPassword"
                     v-model="passwordForm.confirmNewPassword"
                     required
                     minlength="6"
+                    autocomplete="new-password"
                   />
                 </div>
 

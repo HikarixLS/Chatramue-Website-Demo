@@ -11,10 +11,12 @@
               <input
                 type="text"
                 id="fullName"
+                name="fullName"
                 v-model="form.fullName"
                 :disabled="isLoading"
                 required
                 placeholder="Nhập họ và tên"
+                autocomplete="name"
               />
             </div>
 
@@ -23,9 +25,11 @@
               <input
                 type="tel"
                 id="phone"
+                name="phone"
                 v-model="form.phone"
                 :disabled="isLoading"
                 placeholder="Nhập số điện thoại"
+                autocomplete="tel"
               />
             </div>
           </div>
@@ -35,10 +39,12 @@
             <input
               type="email"
               id="email"
+              name="email"
               v-model="form.email"
               :disabled="isLoading"
               required
               placeholder="Nhập email của bạn"
+              autocomplete="email"
             />
           </div>
 
@@ -49,11 +55,13 @@
                 <input
                   :type="showPassword ? 'text' : 'password'"
                   id="password"
+                  name="password"
                   v-model="form.password"
                   :disabled="isLoading"
                   required
                   placeholder="Nhập mật khẩu"
                   minlength="6"
+                  autocomplete="new-password"
                 />
                 <button 
                   type="button" 
@@ -72,11 +80,13 @@
                 <input
                   :type="showConfirmPassword ? 'text' : 'password'"
                   id="confirmPassword"
+                  name="confirmPassword"
                   v-model="form.confirmPassword"
                   :disabled="isLoading"
                   required
                   placeholder="Nhập lại mật khẩu"
                   minlength="6"
+                  autocomplete="new-password"
                 />
                 <button 
                   type="button" 
@@ -94,10 +104,12 @@
             <label for="address">Địa chỉ</label>
             <textarea
               id="address"
+              name="address"
               v-model="form.address"
               :disabled="isLoading"
               placeholder="Nhập địa chỉ của bạn"
               rows="3"
+              autocomplete="street-address"
             ></textarea>
           </div>
 

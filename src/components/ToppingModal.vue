@@ -26,7 +26,10 @@
               <input 
                 type="checkbox" 
                 :value="topping.id"
+                :id="`topping-${topping.id}`"
+                :name="`topping-${topping.id}`"
                 v-model="selectedToppings"
+                autocomplete="off"
               >
               <span class="topping-name">{{ topping.name }}</span>
               <span class="topping-price">+{{ formatPrice(topping.price) }}</span>
@@ -46,8 +49,10 @@
                 <input 
                   type="radio" 
                   :value="option.id"
+                  :id="`size-${option.id}`"
                   v-model="selectedSize"
                   name="size-level"
+                  autocomplete="off"
                 >
                 <span>{{ option.name }}</span>
               </label>
@@ -65,8 +70,10 @@
                 <input 
                   type="radio" 
                   :value="option.id"
+                  :id="`ice-${option.id}`"
                   v-model="selectedIce"
                   name="ice-level"
+                  autocomplete="off"
                 >
                 <span>{{ option.name }}</span>
               </label>
@@ -84,8 +91,10 @@
                 <input 
                   type="radio" 
                   :value="option.id"
+                  :id="`sugar-${option.id}`"
                   v-model="selectedSugar"
                   name="sugar-level"
+                  autocomplete="off"
                 >
                 <span>{{ option.name }}</span>
               </label>
@@ -100,9 +109,11 @@
             <input 
               type="number" 
               id="quantity"
+              name="quantity"
               v-model.number="quantity" 
               min="1" 
               max="10"
+              autocomplete="off"
             >
             <button @click="increaseQuantity" :disabled="quantity >= 10">+</button>
           </div>
